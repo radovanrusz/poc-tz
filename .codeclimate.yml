@@ -1,0 +1,25 @@
+version: "1"
+
+exclude_patterns:
+- "test/"
+- "buildConfig/"
+- "config/"
+- "**/__tests__/"
+- "**/vendor"
+- "**/webpack.*.js"
+- "build/"
+- "node_modules"
+
+checks:
+  similar-code:
+    config:
+      threshold: 60
+  identical-code:
+    config:
+      threshold: 60
+  method-lines:
+    config:
+      threshold: 30
+plugins:
+  eslint:
+    enabled: false

@@ -1,0 +1,4 @@
+{
+    "integrationFolder": "./tests/cypress",
+    "testFiles": "**.spec.js"
+}
