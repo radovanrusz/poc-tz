@@ -40,6 +40,9 @@
             @select="onChangeMultiselect($event, 'mvm2')">
           </multiselect>
         </p>
+        <span>
+          <button type="button" class="btn btn-primary" @click="confirmFilter">Potvrd</button>
+        </span>
         <p class="table container">
           <table class="table table-hover">
             <thead>
@@ -125,7 +128,9 @@ export default class SubPage extends Vue {
   created() {
     debugger;
 
-    this.loadJournalItems();
+    this.loadJournalFilterItems();
+
+    // this.loadJournalItems();
 
     // this.value = { title: 'Material0', desc: 'Balik nicoho' };
 
@@ -140,28 +145,18 @@ export default class SubPage extends Vue {
   // onChangeMultiselect(event: any, { id, value }:{ id: any, value: any }) {
   onChangeMultiselect(event: any, id: any) {
     debugger;
-    let resJournal: any[] = [];
     if (id === 'kmat') {
-      if (!event.title) {
-        this.itemsJournalFilteredKmat = this.itemsJournal.map((item: any) => item._id);
-      } else {
-        this.itemsJournalFilteredKmat = this.itemsJournal.filter((item: any) => item.kmat === event.title).map((item: any) => item._id);
-      }
+      this.valueKmat = event;
     } else if (id === 'mvm1') {
-      if (!event.title) {
-        this.itemsJournalFilteredMvm1 = this.itemsJournal.map((item: any) => item._id);
-      } else {
-        this.itemsJournalFilteredMvm1 = this.itemsJournal.filter((item: any) => item.mvm1 === event.title).map((item: any) => item._id);
-      }
+      this.valueMvm1 = event;
     } else if (id === 'mvm2') {
-      if (!event.title) {
-        this.itemsJournalFilteredMvm2 = this.itemsJournal.map((item: any) => item._id);
-      } else {
-        this.itemsJournalFilteredMvm2 = this.itemsJournal.filter((item: any) => item.mvm2 === event.title).map((item: any) => item._id);
-      }
+      this.valueMvm2 = event;
     }
-    resJournal = _.intersection(this.itemsJournalFilteredKmat, this.itemsJournalFilteredMvm1, this.itemsJournalFilteredMvm2);
-    this.itemsJournalFiltered = generalHelper.getItemsObjBasedArrayIds(resJournal, this.itemsJournal);
+  }
+
+  confirmFilter() {
+    debugger;
+    this.loadJournalItems();
   }
 
   customSelectKmat({ title }: { title: string }): string {
@@ -192,35 +187,60 @@ export default class SubPage extends Vue {
     return generalHelper.pickDeep(this.currentPageSubpage, ['content', 'filterTable'], false);
   }
 
-  loadJournalItems() {
+  loadJournalFilterItems() {
     debugger;
     this.optionsKmat.push({ title: '' });
     this.optionsMvm1.push({ title: '' });
     this.optionsMvm2.push({ title: '' });
-    let status = MODE_LOADING;
-    const reference = REFERENCE_INITIAL;
-    this.setMode({ reference, status });
-    // httpService.getDirect('https://wmj-ibm-demo-app.trineckezelezarny-15729-56325c34021cf286d0e188cc291cdca2-0001.us-east.containers.appdomain.cloud/journal').then((response) => {
-    httpMockService.getMockJournalDelay().then((response) => {
+
+    httpService.getDirect('http://localhost:3000/initialjournalFilters').then((response) => {
       debugger;
-      this.itemsJournal = response;
-      this.itemsJournalFiltered = response;
-      // this.itemsJournal = response.data;
-      // this.itemsJournalFiltered = response.data;
-      for (let i = 0; i < this.itemsJournal.length; i++) {
-        this.optionsKmat.push({ title: this.itemsJournal[i].kmat });
-        this.optionsMvm1.push({ title: this.itemsJournal[i].mvm1 });
-        this.optionsMvm2.push({ title: this.itemsJournal[i].mvm2 });
-      }
+      const resData = response.data;
+      Object.keys(resData).forEach((key) => {
+        for (let i = 0; i < resData[key].length; i++) {
+          if (key === 'kmat') {
+            this.optionsKmat.push({ title: resData[key][i] });
+          } else if (key === 'mvm1') {
+            this.optionsMvm1.push({ title: resData[key][i] });
+          } else if (key === 'mvm2') {
+            this.optionsMvm2.push({ title: resData[key][i] });
+          }
+        }
+      });
+    }).finally(() => {
       this.optionsKmat = _.orderBy(_.uniqBy(this.optionsKmat, 'title'), ['title'], ['asc']);
       this.optionsMvm1 = _.orderBy(_.uniqBy(this.optionsMvm1, 'title'), ['title'], ['asc']);
       this.optionsMvm2 = _.orderBy(_.uniqBy(this.optionsMvm2, 'title'), ['title'], ['asc']);
       [this.valueKmat] = this.optionsKmat;
       [this.valueMvm1] = this.optionsMvm1;
       [this.valueMvm2] = this.optionsMvm2;
-      this.itemsJournalFilteredKmat = this.itemsJournalFiltered.map((item: any) => item._id);
-      this.itemsJournalFilteredMvm1 = this.itemsJournalFiltered.map((item: any) => item._id);
-      this.itemsJournalFilteredMvm2 = this.itemsJournalFiltered.map((item: any) => item._id);
+    });
+  }
+
+  loadJournalItems() {
+    debugger;
+    let status = MODE_LOADING;
+    const reference = REFERENCE_INITIAL;
+    this.setMode({ reference, status });
+    let queryString = '';
+    if (this.valueKmat.title) {
+      queryString = `${queryString}kmat=${this.valueKmat.title}&`;
+    }
+    if (this.valueMvm1.title) {
+      queryString = `${queryString}mvm1=${this.valueMvm1.title}&`;
+    }
+    if (this.valueMvm2.title) {
+      queryString = `${queryString}mvm2=${this.valueMvm2.title}&`;
+    }
+    if (queryString) {
+      queryString = `?${queryString}`;
+      queryString = queryString.slice(0, -1);
+    }
+    httpService.getDirect(`http://localhost:3000/journal${queryString}`).then((response) => {
+    // httpService.getDirect('https://wmj-ibm-demo-app.trineckezelezarny-15729-56325c34021cf286d0e188cc291cdca2-0001.us-east.containers.appdomain.cloud/journal').then((response) => {
+    // httpMockService.getMockJournalDelay().then((response) => {
+      debugger;
+      this.itemsJournalFiltered = response.data;
     }, (error) => {
       console.log('error ', error);
     }).finally(() => {
