@@ -40,9 +40,9 @@
             @select="onChangeMultiselect($event, 'mvm2')">
           </multiselect>
         </p>
-        <span>
-          <button type="button" class="btn btn-primary" @click="confirmFilter">Potvrd</button>
-        </span>
+        <div class="confirm-btn">
+          <span><button type="button" class="btn btn-primary" @click="confirmFilter">Potvrd</button> {{limitInfo}}</span>
+        </div>
         <p class="table container">
           <table class="table table-hover">
             <thead>
@@ -88,6 +88,10 @@ const generalHelper = new GeneralHelper();
 const httpService = new HttpService();
 const httpMockService = new HttpMockService();
 
+const journalBaseUrl = 'https://wmj-ibm-demo-app.trineckezelezarny-15729-56325c34021cf286d0e188cc291cdca2-0001.us-east.containers.appdomain.cloud/journal';
+const journalBaseUrlLocal = 'http://localhost:3000/journal';
+const limit = '20';
+
 @Component({
   components: {
     Multiselect
@@ -126,8 +130,6 @@ export default class SubPage extends Vue {
     ({ reference, status }: { reference: Reference, status: AppMode }) => void;
 
   created() {
-    debugger;
-
     this.loadJournalFilterItems();
 
     // this.loadJournalItems();
@@ -187,6 +189,10 @@ export default class SubPage extends Vue {
     return generalHelper.pickDeep(this.currentPageSubpage, ['content', 'filterTable'], false);
   }
 
+  get limitInfo(): String {
+    return `current limit: ${limit} items`;
+  }
+
   loadJournalFilterItems() {
     debugger;
     this.optionsKmat.push({ title: '' });
@@ -217,11 +223,7 @@ export default class SubPage extends Vue {
     });
   }
 
-  loadJournalItems() {
-    debugger;
-    let status = MODE_LOADING;
-    const reference = REFERENCE_INITIAL;
-    this.setMode({ reference, status });
+  get generateUrl(): string {
     let queryString = '';
     if (this.valueKmat.title) {
       queryString = `${queryString}kmat=${this.valueKmat.title}&`;
@@ -232,19 +234,24 @@ export default class SubPage extends Vue {
     if (this.valueMvm2.title) {
       queryString = `${queryString}mvm2=${this.valueMvm2.title}&`;
     }
+    queryString = `${queryString}limit=${limit}&`;
     if (queryString) {
       queryString = `?${queryString}`;
       queryString = queryString.slice(0, -1);
     }
-    httpService.getDirect(`http://localhost:3000/journal${queryString}`).then((response) => {
-    // httpService.getDirect('https://wmj-ibm-demo-app.trineckezelezarny-15729-56325c34021cf286d0e188cc291cdca2-0001.us-east.containers.appdomain.cloud/journal').then((response) => {
+    return `${journalBaseUrl}${queryString}`;
+  }
+
+  loadJournalItems() {
+    let status = MODE_LOADING;
+    const reference = REFERENCE_INITIAL;
+    this.setMode({ reference, status });
+    httpService.getDirect(this.generateUrl).then((response) => {
     // httpMockService.getMockJournalDelay().then((response) => {
-      debugger;
       this.itemsJournalFiltered = response.data;
     }, (error) => {
       console.log('error ', error);
     }).finally(() => {
-      debugger;
       status = MODE_LOADED;
       this.setMode({ reference, status });
     });
@@ -271,6 +278,16 @@ export default class SubPage extends Vue {
   }
   .table {
     float: left;
+  }
+  .confirm-btn {
+    float: left;
+    width: 250px;
+    position: relative;
+    height: 100px;
+    span {
+      position: absolute;
+      bottom: 20px;
+    }
   }
 }
 </style>
