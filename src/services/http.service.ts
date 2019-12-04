@@ -113,7 +113,7 @@ export class HttpService {
   public putDirect(url: string): Promise<any> {
     /* eslint-disable */
     debugger;
-    const obj = {'kmat': '11111-jp', 'hmotnost': 66};
+    const obj = {'hmotnost': 66};
     // const stringObj = JSON.stringify(obj);
     // const headers: any = {'Content-Type': 'application/x-www-form-urlencoded'};
     // return Vue.axios.put(url, stringObj, headers);
