@@ -3,7 +3,7 @@
     <div :id="currentSubpageId">
       <p class="title">{{currentSubpageTitle}}</p>
       <p class="text">{{currentSubpageText}}</p>
-      <div v-if="currentSubpageFilterTable">
+      <div v-if="currentPageId === 'pwhjj' && currentSubpageJournalFilterTable">
         <p class="search-dropdown" id="kmat">
           <label>KMAT</label>
           <multiselect
@@ -66,6 +66,12 @@
           </table>
         </p>
       </div>
+      <div v-if="currentPageId === 'rm'">
+        Registrace materialu
+        <p>
+          <button type="button" class="btn btn-primary" @click="putNewId">Put new id test</button>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -93,6 +99,7 @@ const journalBaseUrlLocal = process.env.VUE_APP_JOURNAL_URL_LOCAL;
 const journalFiltersUrl = process.env.VUE_APP_JOURNAL_FILTERS_URL;
 const journalFiltersUrlLocal = process.env.VUE_APP_JOURNAL_FILTERS_URL_LOCAL;
 const limit = process.env.VUE_APP_JOURNAL_LIMIT;
+const material = process.env.VUE_APP_MATERIAL_URL;
 
 @Component({
   components: {
@@ -127,6 +134,8 @@ export default class SubPage extends Vue {
   itemsJournalFilteredMvm2: any = [];
 
   @PagesStore.Getter currentPageSubpage!: Subpage;
+
+  @PagesStore.Getter currentPage!: Page;
 
   @ModeStore.Action setMode!:
     ({ reference, status }: { reference: Reference, status: AppMode }) => void;
@@ -175,6 +184,17 @@ export default class SubPage extends Vue {
     return title ? `${title}` : '';
   }
 
+  putNewId() {
+    debugger;
+    httpService.putDirect(`${material}`).then((response) => {
+      debugger;
+    });
+  }
+
+  get currentPageId(): String {
+    return generalHelper.pickDeep(this.currentPage, ['id'], '');
+  }
+
   get currentSubpageTitle(): String {
     return generalHelper.pickDeep(this.currentPageSubpage, ['content', 'title'], '');
   }
@@ -187,7 +207,7 @@ export default class SubPage extends Vue {
     return generalHelper.pickDeep(this.currentPageSubpage, ['id'], '');
   }
 
-  get currentSubpageFilterTable(): String {
+  get currentSubpageJournalFilterTable(): String {
     return generalHelper.pickDeep(this.currentPageSubpage, ['content', 'filterTable'], false);
   }
 
