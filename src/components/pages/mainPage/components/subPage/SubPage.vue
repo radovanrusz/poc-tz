@@ -88,11 +88,11 @@ const generalHelper = new GeneralHelper();
 const httpService = new HttpService();
 const httpMockService = new HttpMockService();
 
-const journalBaseUrl = 'https://wmj-ibm-demo-app.trineckezelezarny-15729-56325c34021cf286d0e188cc291cdca2-0001.us-east.containers.appdomain.cloud/journal';
-const journalBaseUrlLocal = 'http://localhost:3000/journal';
-const journalFiltersUrlLocal = 'http://localhost:3000/initialjournalFilters';
-const journalFiltersUrl = 'https://wmj-ibm-demo-app.trineckezelezarny-15729-56325c34021cf286d0e188cc291cdca2-0001.us-east.containers.appdomain.cloud/initialjournalFilters';
-const limit = '20';
+const journalBaseUrl = process.env.VUE_APP_JOURNAL_URL;
+const journalBaseUrlLocal = process.env.VUE_APP_JOURNAL_URL_LOCAL;
+const journalFiltersUrl = process.env.VUE_APP_JOURNAL_FILTERS_URL;
+const journalFiltersUrlLocal = process.env.VUE_APP_JOURNAL_FILTERS_URL_LOCAL;
+const limit = process.env.VUE_APP_JOURNAL_LIMIT;
 
 @Component({
   components: {
@@ -192,6 +192,7 @@ export default class SubPage extends Vue {
   }
 
   get limitInfo(): String {
+    debugger;
     return `current limit: ${limit} items`;
   }
 
