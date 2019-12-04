@@ -110,14 +110,8 @@ export class HttpService {
     return Vue.axios.get(url);
   }
 
-  public putDirect(url: string): Promise<any> {
-    /* eslint-disable */
-    debugger;
-    const obj = {'hmotnost': 66};
-    // const stringObj = JSON.stringify(obj);
-    // const headers: any = {'Content-Type': 'application/x-www-form-urlencoded'};
-    // return Vue.axios.put(url, stringObj, headers);
-    return Vue.axios.put(`${url}?kmat=11111`, obj);
+  public putDirect(url: string, obj: any): Promise<any> {
+    return Vue.axios.put(`${url}`, obj);
   }
 
   /** POST request

@@ -186,7 +186,9 @@ export default class SubPage extends Vue {
 
   putNewId() {
     debugger;
-    httpService.putDirect(`${material}`).then((response) => {
+    const idParam = 'kmat=11111';
+    const dataObj = { hmotnost: 660 };
+    httpService.putDirect(`${material}?${idParam}`, dataObj).then((response) => {
       debugger;
     });
   }
