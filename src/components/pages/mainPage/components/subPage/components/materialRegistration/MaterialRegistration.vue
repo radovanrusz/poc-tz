@@ -21,6 +21,9 @@
     <p class="confirm-btn">
       <span><button type="button" class="btn btn-primary" @click="putNewId">Registrovat</button></span>
     </p>
+    <p class="confirm-btn">
+      <span><button type="button" class="btn btn-primary" @click="putExistingId">Update</button></span>
+    </p>
   </div>
 </template>
 
@@ -43,6 +46,7 @@ const httpService = new HttpService();
 const httpMockService = new HttpMockService();
 
 const material = process.env.VUE_APP_MATERIAL_URL;
+const material1 = process.env.VUE_APP_MATERIAL_URL1;
 
 @Component({
   components: {
@@ -76,16 +80,18 @@ export default class MaterialRegistration extends Vue {
       hmotnost: 66099,
       kmat: '12',
       mnozstvi: 11,
-      mvm: '14'
+      // mvm: '14',
+      mvmFrom: '1',
+      mvmTo: '2'
     };
-    httpService.putDirect(`${material}`, dataObj).then((response) => {
+    httpService.putDirect(material1, dataObj).then((response) => {
       debugger;
     });
   }
 
   putExistingId() {
     const idParam = 'kmat=11111';
-    const dataObj = { hmotnost: 6609 };
+    const dataObj = { hmotnost: 660988 };
     httpService.putDirect(`${material}?${idParam}`, dataObj).then((response) => {
       debugger;
     });

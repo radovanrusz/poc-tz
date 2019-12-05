@@ -111,6 +111,7 @@ export class HttpService {
   }
 
   public putDirect(url: string, obj: any): Promise<any> {
+    debugger;
     return Vue.axios.put(`${url}`, obj);
   }
 
