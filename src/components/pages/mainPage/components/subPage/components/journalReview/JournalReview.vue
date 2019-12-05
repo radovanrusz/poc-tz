@@ -63,7 +63,8 @@
         </tbody>
       </table>
     </p>
-    </div>
+    <message :msgType="messageType" :text="messageText" :visibilityMessageRef="visibilityMessage" v-if="showMessage"/>
+  </div>
 </template>
 
 <script lang="ts">
@@ -77,6 +78,7 @@ import { GeneralHelper } from '@/helpers/general.helper';
 import { HttpMockService, HttpService } from '@/services/http.service';
 import { Reference, AppMode } from '@/stores/mode/mode.types';
 import { MODE_LOADING, REFERENCE_INITIAL, MODE_LOADED } from '@/stores/mode/constants';
+import Message from '@/components/common/message/Message.vue';
 
 const PagesStore = namespace(PAGES);
 const ModeStore = namespace(MODE);
@@ -93,7 +95,8 @@ const material = process.env.VUE_APP_MATERIAL_URL;
 
 @Component({
   components: {
-    Multiselect
+    Multiselect,
+    Message
   },
   props: {
     title: {
@@ -137,6 +140,12 @@ export default class JournalReview extends Vue {
 
   @ModeStore.Action setMode!:
     ({ reference, status }: { reference: Reference, status: AppMode }) => void;
+
+  messageText: string = '';
+
+  messageType: string = 'alert-success';
+
+  showMessage: boolean = false;
 
   created() {
     this.loadJournalFilterItems();
@@ -238,13 +247,24 @@ export default class JournalReview extends Vue {
     this.setMode({ reference, status });
     httpService.getDirect(this.generateUrl).then((response) => {
     // httpMockService.getMockJournalDelay().then((response) => {
+      this.messageText = 'Query executed successfully';
+      this.messageType = 'alert-success';
+      this.showMessage = true;
       this.itemsJournalFiltered = response.data;
     }, (error) => {
+      this.messageText = 'Query failed';
+      this.messageType = 'alert-danger';
+      this.showMessage = true;
       console.log('error ', error);
     }).finally(() => {
       status = MODE_LOADED;
       this.setMode({ reference, status });
     });
+  }
+
+  visibilityMessage(obj: any) {
+    debugger;
+    this.showMessage = obj.visibility;
   }
 }
 </script>

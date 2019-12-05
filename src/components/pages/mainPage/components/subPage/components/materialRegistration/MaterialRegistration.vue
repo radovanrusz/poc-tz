@@ -77,21 +77,20 @@ export default class MaterialRegistration extends Vue {
   putNewId() {
     debugger;
     const dataObj = {
-      hmotnost: 66099,
+      hmotnost: 660997777,
       kmat: '12',
       mnozstvi: 11,
-      // mvm: '14',
-      mvmFrom: '1',
-      mvmTo: '2'
+      mvmFrom: '14',
+      mvmTo: '16'
     };
-    httpService.putDirect(material1, dataObj).then((response) => {
+    httpService.putDirect(material, dataObj).then((response) => {
       debugger;
     });
   }
 
   putExistingId() {
     const idParam = 'kmat=11111';
-    const dataObj = { hmotnost: 660988 };
+    const dataObj = { hmotnost: 6609889900 };
     httpService.putDirect(`${material}?${idParam}`, dataObj).then((response) => {
       debugger;
     });
