@@ -63,7 +63,7 @@
         </tbody>
       </table>
     </p>
-    <message :msgType="messageType" :text="messageText" :visibilityMessageRef="visibilityMessage" v-if="showMessage"/>
+    <message :msgType="message.type" :text="message.text" :visibilityMessageRef="visibilityMessage" v-if="showMessage"/>
   </div>
 </template>
 
@@ -141,9 +141,7 @@ export default class JournalReview extends Vue {
   @ModeStore.Action setMode!:
     ({ reference, status }: { reference: Reference, status: AppMode }) => void;
 
-  messageText: string = '';
-
-  messageType: string = 'alert-success';
+  message: { type: string, text: string } = { type: '', text: '' };
 
   showMessage: boolean = false;
 
@@ -224,13 +222,13 @@ export default class JournalReview extends Vue {
 
   get generateUrl(): string {
     let queryString = '';
-    if (this.valueKmat.title) {
+    if (this.valueKmat && this.valueKmat.title) {
       queryString = `${queryString}kmat=${this.valueKmat.title}&`;
     }
-    if (this.valueMvm1.title) {
+    if (this.valueMvm1 && this.valueMvm1.title) {
       queryString = `${queryString}mvm1=${this.valueMvm1.title}&`;
     }
-    if (this.valueMvm2.title) {
+    if (this.valueMvm2 && this.valueMvm2.title) {
       queryString = `${queryString}mvm2=${this.valueMvm2.title}&`;
     }
     queryString = `${queryString}limit=${limit}&`;
@@ -247,19 +245,27 @@ export default class JournalReview extends Vue {
     this.setMode({ reference, status });
     httpService.getDirect(this.generateUrl).then((response) => {
     // httpMockService.getMockJournalDelay().then((response) => {
-      this.messageText = 'Query executed successfully';
-      this.messageType = 'alert-success';
-      this.showMessage = true;
+      this.messageBox('success');
       this.itemsJournalFiltered = response.data;
     }, (error) => {
-      this.messageText = 'Query failed';
-      this.messageType = 'alert-danger';
-      this.showMessage = true;
+      this.messageBox('error');
       console.log('error ', error);
     }).finally(() => {
       status = MODE_LOADED;
       this.setMode({ reference, status });
     });
+  }
+
+  messageBox(type: string) {
+    if (type === 'success') {
+      this.message.text = 'Query executed successfully';
+      this.message.type = 'alert-success';
+      this.showMessage = true;
+    } else if (type === 'error') {
+      this.message.text = 'Query failed';
+      this.message.type = 'alert-danger';
+      this.showMessage = true;
+    }
   }
 
   visibilityMessage(obj: any) {
