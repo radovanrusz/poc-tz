@@ -1,16 +1,14 @@
 <template>
   <div class="sub-page shadow rounded text-left" :id="idComponent">
-    <div :id="currentSubpageId">
-      <p class="title">{{currentSubpageTitle}}</p>
-      <p class="text">{{currentSubpageText}}</p>
+    <div :id="`${currentPageId}-${currentSubpageId}`">
       <div v-if="currentPageId === 'pwhjj' && currentSubpageJournalFilterTable">
-        <journal-review />
+        <journal-review :title="currentSubpageTitle" :text="currentSubpageText"/>
       </div>
-      <div v-if="currentPageId === 'rm'">
-        Registrace materialu
-        <p>
-          <button type="button" class="btn btn-primary" @click="putNewId">Put new id test</button>
-        </p>
+      <div v-else-if="currentPageId === 'rm' && currentSubpageMaterialRegistrationInputs">
+        <material-registration :title="currentSubpageTitle" :text="currentSubpageText"/>
+      </div>
+      <div v-else>
+        <common-subpage :title="currentSubpageTitle" :text="currentSubpageText"/>
       </div>
     </div>
   </div>
@@ -28,6 +26,8 @@ import { HttpMockService, HttpService } from '@/services/http.service';
 import { Reference, AppMode } from '@/stores/mode/mode.types';
 import { MODE_LOADING, REFERENCE_INITIAL, MODE_LOADED } from '@/stores/mode/constants';
 import JournalReview from './components/journalReview/JournalReview.vue';
+import MaterialRegistration from './components/materialRegistration/MaterialRegistration.vue';
+import CommonSubpage from './components/commonSubpage/CommonSubpage.vue';
 
 const PagesStore = namespace(PAGES);
 const ModeStore = namespace(MODE);
@@ -44,7 +44,9 @@ const material = process.env.VUE_APP_MATERIAL_URL;
 
 @Component({
   components: {
-    JournalReview
+    JournalReview,
+    MaterialRegistration,
+    CommonSubpage
   },
   props: {
   }
@@ -55,15 +57,6 @@ export default class SubPage extends Vue {
   @PagesStore.Getter currentPageSubpage!: Subpage;
 
   @PagesStore.Getter currentPage!: Page;
-
-  putNewId() {
-    debugger;
-    const idParam = 'kmat=11111';
-    const dataObj = { hmotnost: 660 };
-    httpService.putDirect(`${material}?${idParam}`, dataObj).then((response) => {
-      debugger;
-    });
-  }
 
   get currentPageId(): String {
     return generalHelper.pickDeep(this.currentPage, ['id'], '');
@@ -84,6 +77,10 @@ export default class SubPage extends Vue {
   get currentSubpageJournalFilterTable(): String {
     return generalHelper.pickDeep(this.currentPageSubpage, ['content', 'filterTable'], false);
   }
+
+  get currentSubpageMaterialRegistrationInputs(): String {
+    return generalHelper.pickDeep(this.currentPageSubpage, ['content', 'inputs'], false);
+  }
 }
 </script>
 
@@ -94,8 +91,5 @@ export default class SubPage extends Vue {
   margin: 20px 0;
   width: inherit;
   min-height: 500px;
-  .title, .text {
-    margin: 10px;
-  }
 }
 </style>

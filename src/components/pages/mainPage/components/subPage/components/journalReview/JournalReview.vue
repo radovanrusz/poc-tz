@@ -1,66 +1,68 @@
 <template>
-    <div :id="idComponent" class="journal-review">
-        <p class="search-dropdown" id="kmat">
-            <label>KMAT</label>
-            <multiselect
-            v-model="valueKmat" :options="optionsKmat"
-            :custom-label="customSelectKmat"
-            placeholder=""
-            label="title" track-by="title"
-            :show-labels="false"
-            :allow-empty="false"
-            @select="onChangeMultiselect($event, 'kmat')">
-            </multiselect>
-        </p>
-        <p class="search-dropdown" id="mvm1">
-            <label>MVM1</label>
-            <multiselect
-            v-model="valueMvm1" :options="optionsMvm1"
-            :custom-label="customSelectMvm1"
-            placeholder=""
-            label="title" track-by="title"
-            :show-labels="false"
-            :allow-empty="false"
-            @select="onChangeMultiselect($event, 'mvm1')">
-            </multiselect>
-        </p>
-        <p class="search-dropdown" id="mvm2">
-            <label>MVM2</label>
-            <multiselect
-            v-model="valueMvm2" :options="optionsMvm2"
-            :custom-label="customSelectMvm2"
-            placeholder=""
-            label="title" track-by="title"
-            :show-labels="false"
-            :allow-empty="false"
-            @select="onChangeMultiselect($event, 'mvm2')">
-            </multiselect>
-        </p>
-        <div class="confirm-btn">
-            <span><button type="button" class="btn btn-primary" @click="confirmFilter">Potvrd</button> {{limitInfo}}</span>
-        </div>
-        <p class="table container">
-            <table class="table table-hover">
-            <thead>
-                <tr>
-                <th>KMAT</th>
-                <th>MNOZSTVI</th>
-                <th>HMOTNOST</th>
-                <th>MVM1</th>
-                <th>MVM2</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(item, index) in itemsJournalFiltered" :key="item._id" :id="item._id" :index="index">
-                <td>{{item.kmat}}</td>
-                <td>{{item.mnozstvi}}</td>
-                <td>{{item.hmotnost}}</td>
-                <td>{{item.mvm1}}</td>
-                <td>{{item.mvm2}}</td>
-                </tr>
-            </tbody>
-            </table>
-        </p>
+  <div :id="idComponent" class="subcategory">
+    <p class="title">{{title}}</p>
+    <p class="text">{{text}}</p>
+    <p class="search-dropdown" id="kmat">
+      <label>KMAT</label>
+      <multiselect
+      v-model="valueKmat" :options="optionsKmat"
+      :custom-label="customSelectKmat"
+      placeholder=""
+      label="title" track-by="title"
+      :show-labels="false"
+      :allow-empty="false"
+      @select="onChangeMultiselect($event, 'kmat')">
+      </multiselect>
+    </p>
+    <p class="search-dropdown" id="mvm1">
+      <label>MVM1</label>
+      <multiselect
+      v-model="valueMvm1" :options="optionsMvm1"
+      :custom-label="customSelectMvm1"
+      placeholder=""
+      label="title" track-by="title"
+      :show-labels="false"
+      :allow-empty="false"
+      @select="onChangeMultiselect($event, 'mvm1')">
+      </multiselect>
+    </p>
+    <p class="search-dropdown" id="mvm2">
+      <label>MVM2</label>
+      <multiselect
+      v-model="valueMvm2" :options="optionsMvm2"
+      :custom-label="customSelectMvm2"
+      placeholder=""
+      label="title" track-by="title"
+      :show-labels="false"
+      :allow-empty="false"
+      @select="onChangeMultiselect($event, 'mvm2')">
+      </multiselect>
+    </p>
+    <div class="confirm-btn">
+      <span><button type="button" class="btn btn-primary" @click="confirmFilter">Potvrd</button> {{limitInfo}}</span>
+    </div>
+    <p class="table container">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+          <th>KMAT</th>
+          <th>MNOZSTVI</th>
+          <th>HMOTNOST</th>
+          <th>MVM1</th>
+          <th>MVM2</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in itemsJournalFiltered" :key="item._id" :id="item._id" :index="index">
+            <td>{{item.kmat}}</td>
+            <td>{{item.mnozstvi}}</td>
+            <td>{{item.hmotnost}}</td>
+            <td>{{item.mvm1}}</td>
+            <td>{{item.mvm2}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </p>
     </div>
 </template>
 
@@ -94,6 +96,14 @@ const material = process.env.VUE_APP_MATERIAL_URL;
     Multiselect
   },
   props: {
+    title: {
+      required: true,
+      type: String
+    },
+    text: {
+      required: true,
+      type: String
+    }
   }
 })
 export default class JournalReview extends Vue {
@@ -240,7 +250,10 @@ export default class JournalReview extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.journal-review {
+.subcategory {
+  .title, .text {
+    margin: 10px;
+  }
   .search-dropdown {
     margin: 10px;
     float: left;

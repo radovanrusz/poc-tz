@@ -72,7 +72,7 @@
                 "content": {
                     "title": "registrace materialu osobni administrace",
                     "text": "vitajte na osobni administraci registrace materialu",
-                    "filterTable": true
+                    "inputs": true
                 }
             }
         ]
