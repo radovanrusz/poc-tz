@@ -2,10 +2,25 @@
   <div :id="idComponent" class="subcategory">
     <p class="title">{{title}}</p>
     <p class="text">{{text}}</p>
-    <p>
-      <button type="button" class="btn btn-primary" @click="putNewId">Put new id test</button>
+    <div class="form-group reg-input">
+      <label for="kmat">KMAT</label>
+      <input type="text" class="form-control" id="kmat" v-model="regKmat">
+    </div>
+    <div class="form-group reg-input">
+      <label for="mvm">MVM</label>
+      <input type="text" class="form-control" id="mvm" v-model="regMvm">
+    </div>
+    <div class="form-group reg-input">
+      <label for="mnozstvi">MNOZSTVI</label>
+      <input type="text" class="form-control" id="mnozstvi" v-model="regMnozstvi">
+    </div>
+    <div class="form-group reg-input">
+      <label for="hmotnost">HMOTNOST</label>
+      <input type="text" class="form-control" id="hmotnost" v-model="regHmotnost">
+    </div>
+    <p class="confirm-btn">
+      <span><button type="button" class="btn btn-primary" @click="putNewId">Registrovat</button></span>
     </p>
-    <input/>
   </div>
 </template>
 
@@ -47,8 +62,28 @@ const material = process.env.VUE_APP_MATERIAL_URL;
 export default class MaterialRegistration extends Vue {
   idComponent: string = 'materialRegistration';
 
+  regKmat: any = null;
+
+  regMvm: any = null;
+
+  regMnozstvi: any = null;
+
+  regHmotnost: any = null;
+
   putNewId() {
     debugger;
+    const dataObj = {
+      hmotnost: 66099,
+      kmat: '12',
+      mnozstvi: 11,
+      mvm: '14'
+    };
+    httpService.putDirect(`${material}`, dataObj).then((response) => {
+      debugger;
+    });
+  }
+
+  putExistingId() {
     const idParam = 'kmat=11111';
     const dataObj = { hmotnost: 6609 };
     httpService.putDirect(`${material}?${idParam}`, dataObj).then((response) => {
@@ -63,19 +98,14 @@ export default class MaterialRegistration extends Vue {
   .title, .text {
     margin: 10px;
   }
-  .search-dropdown {
+  .reg-input {
     margin: 10px;
     float: left;
-    &#kmat, &#mvm1, &#mvm2{
-      width: 100px;
-    }
-  }
-  .table {
-    float: left;
+    width: 100px;
   }
   .confirm-btn {
     float: left;
-    width: 250px;
+    width: 100px;
     position: relative;
     height: 100px;
     span {
