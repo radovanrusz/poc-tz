@@ -108,7 +108,19 @@ export default class MaterialRegistration extends Vue {
     show: false
   };
 
+  initialRegData() {
+    this.regKmat.value = null;
+    this.regKmat.valid = true;
+    this.regMvm = null;
+    this.regMvmValid = true;
+    this.regMnozstvi.value = null;
+    this.regMnozstvi.valid = true;
+    this.regHmotnost.value = null;
+    this.regHmotnost.valid = true;
+  }
+
   created() {
+    this.initialRegData();
     this.loadMaterialMvmItems();
   }
 
@@ -155,9 +167,11 @@ export default class MaterialRegistration extends Vue {
       httpService.putDirect(material, dataObj).then((response) => {
         debugger;
         this.messageBoxShow('success');
+        this.initialRegData();
       }, (error) => {
         this.messageBoxShow('error');
         console.log('error ', error);
+        this.initialRegData();
       }).finally(() => {
         this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADED });
         this.messageBoxHide();
