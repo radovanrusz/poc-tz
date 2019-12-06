@@ -63,7 +63,13 @@
         </tbody>
       </table>
     </p>
-    <message :msgType="message.type" :text="message.text" :visibilityMessageRef="visibilityMessage" v-if="showMessage"/>
+    <message
+      :executed="message.executed"
+      :type="message.type"
+      :text="message.text"
+      :visibilityMessageRef="visibilityMessage"
+      v-if="message.show"
+    />
   </div>
 </template>
 
@@ -140,11 +146,12 @@ export default class JournalReview extends Vue {
   @ModeStore.Action setMode!:
     ({ reference, status }: { reference: Reference, status: AppMode }) => void;
 
-  message: { type: string, text: string } = { type: '', text: '' };
-
-  showMessage: boolean = false;
-
-  messageBoxTimeout: any = null;
+  message: { type: string, text: string, executed: boolean, show: boolean } = {
+    type: '',
+    text: '',
+    executed: false,
+    show: false
+  };
 
   created() {
     this.loadJournalFilterItems();
@@ -256,33 +263,26 @@ export default class JournalReview extends Vue {
   }
 
   messageBoxShow(type: string) {
-    if (this.messageBoxTimeout) {
-      clearTimeout(this.messageBoxTimeout);
-    }
     if (type === 'success') {
+      this.message.executed = !this.message.executed;
       this.message.text = 'Query executed successfully';
       this.message.type = 'alert-success';
-      this.showMessage = true;
+      this.message.show = true;
     } else if (type === 'error') {
+      this.message.executed = !this.message.executed;
       this.message.text = 'Query failed';
       this.message.type = 'alert-danger';
-      this.showMessage = true;
+      this.message.show = true;
     }
   }
 
   messageBoxHide() {
-    this.messageBoxTimeout = setTimeout(() => {
-      this.showMessage = false;
-    }, 5000);
+    this.message.executed = !this.message.executed;
   }
 
 
   visibilityMessage(obj: any) {
-    debugger;
-    this.showMessage = obj.visibility;
-    if (this.messageBoxTimeout) {
-      clearTimeout(this.messageBoxTimeout);
-    }
+    this.message.show = obj.visibility;
   }
 }
 </script>
