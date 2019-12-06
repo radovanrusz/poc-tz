@@ -7,10 +7,10 @@
       <input type="text" class="form-control" id="kmat" v-model="regKmat.value">
       <span v-if="!regKmat.valid">Required!</span>
     </div>
-    <div class="form-group reg-input" v-bind:class="{error: !regMvm.valid}">
+    <div class="form-group reg-input" v-bind:class="{error: !regMvmValid}">
       <label>MVM</label>
       <multiselect
-      v-model="regMvm.value" :options="optionsMvm"
+      v-model="regMvm" :options="optionsMvm"
       :custom-label="customSelectMvm1"
       placeholder=""
       label="title" track-by="title"
@@ -18,7 +18,7 @@
       :allow-empty="false"
       @select="onChangeMultiselect($event, 'mvm1')">
       </multiselect>
-      <span v-if="!regMvm.valid">Required!</span>
+      <span v-if="!regMvmValid">Required!</span>
     </div>
     <div class="form-group reg-input" v-bind:class="{error: !regMnozstvi.valid}">
       <label for="mnozstvi">MNOZSTVI</label>
@@ -79,7 +79,9 @@ export default class MaterialRegistration extends Vue {
 
   regKmat: { value: any, valid: boolean } = { value: null, valid: true };
 
-  regMvm: { value: any, valid: boolean } = { value: null, valid: true };
+  regMvm: any = null;
+
+  regMvmValid: boolean = true;
 
   regMnozstvi: { value: any, valid: boolean } = { value: null, valid: true };
 
@@ -103,11 +105,11 @@ export default class MaterialRegistration extends Vue {
     } else {
       this.regKmat.valid = false;
     }
-    if (this.regMvm && this.regMvm.value) {
+    if (this.regMvm && this.regMvm.title) {
       res++;
-      this.regMvm.valid = true;
+      this.regMvmValid = true;
     } else {
-      this.regMvm.valid = false;
+      this.regMvmValid = false;
     }
     if (this.regMnozstvi && this.regMnozstvi.value && !Number.isInteger(this.regMnozstvi.value)) {
       res++;
@@ -131,11 +133,11 @@ export default class MaterialRegistration extends Vue {
         hmotnost: Number(this.regHmotnost.value),
         kmat: this.regKmat.value,
         mnozstvi: Number(this.regMnozstvi.value),
-        mvm: this.regMvm.value
+        mvm: this.regMvm.title
       };
-      // httpService.putDirect(material, dataObj).then((response) => {
-      //   debugger;
-      // });
+      httpService.putDirect(material, dataObj).then((response) => {
+        debugger;
+      });
     }
   }
 
@@ -178,6 +180,7 @@ export default class MaterialRegistration extends Vue {
   }
 
   onChangeMultiselect(event: any, id: any) {
+    debugger;
     if (id === 'mvm1') {
       this.regMvm = event;
       debugger;
