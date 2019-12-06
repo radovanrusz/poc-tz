@@ -46,7 +46,6 @@ const httpService = new HttpService();
 const httpMockService = new HttpMockService();
 
 const material = process.env.VUE_APP_MATERIAL_URL;
-const material1 = process.env.VUE_APP_MATERIAL_URL1;
 
 @Component({
   components: {

@@ -91,7 +91,6 @@ const journalBaseUrlLocal = process.env.VUE_APP_JOURNAL_URL_LOCAL;
 const journalFiltersUrl = process.env.VUE_APP_JOURNAL_FILTERS_URL;
 const journalFiltersUrlLocal = process.env.VUE_APP_JOURNAL_FILTERS_URL_LOCAL;
 const limit = process.env.VUE_APP_JOURNAL_LIMIT;
-const material = process.env.VUE_APP_MATERIAL_URL;
 
 @Component({
   components: {
