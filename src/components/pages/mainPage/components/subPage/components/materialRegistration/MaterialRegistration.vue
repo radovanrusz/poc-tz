@@ -2,14 +2,15 @@
   <div :id="idComponent" class="subcategory">
     <p class="title">{{title}}</p>
     <p class="text">{{text}}</p>
-    <div class="form-group reg-input">
+    <div class="form-group reg-input" v-bind:class="{error: !regKmat.valid}">
       <label for="kmat">KMAT</label>
-      <input type="text" class="form-control" id="kmat" v-model="regKmat">
+      <input type="text" class="form-control" id="kmat" v-model="regKmat.value">
+      <span v-if="!regKmat.valid">Required!</span>
     </div>
-    <div class="form-group reg-input">
+    <div class="form-group reg-input" v-bind:class="{error: !regMvm.valid}">
       <label>MVM</label>
       <multiselect
-      v-model="regMvm" :options="optionsMvm"
+      v-model="regMvm.value" :options="optionsMvm"
       :custom-label="customSelectMvm1"
       placeholder=""
       label="title" track-by="title"
@@ -17,14 +18,17 @@
       :allow-empty="false"
       @select="onChangeMultiselect($event, 'mvm1')">
       </multiselect>
+      <span v-if="!regMvm.valid">Required!</span>
     </div>
-    <div class="form-group reg-input">
+    <div class="form-group reg-input" v-bind:class="{error: !regMnozstvi.valid}">
       <label for="mnozstvi">MNOZSTVI</label>
-      <input type="text" class="form-control" id="mnozstvi" v-model="regMnozstvi">
+      <input type="text" class="form-control" id="mnozstvi" v-model="regMnozstvi.value">
+      <span v-if="!regMnozstvi.valid">Required!</span>
     </div>
-    <div class="form-group reg-input">
+    <div class="form-group reg-input" v-bind:class="{error: !regHmotnost.valid}">
       <label for="hmotnost">HMOTNOST</label>
-      <input type="text" class="form-control" id="hmotnost" v-model="regHmotnost">
+      <input type="text" class="form-control" id="hmotnost" v-model="regHmotnost.value">
+      <span v-if="!regHmotnost.valid">Required!</span>
     </div>
     <p class="confirm-btn">
       <span><button type="button" class="btn btn-primary" @click="putNewId">Registrovat</button></span>
@@ -73,13 +77,13 @@ const material = process.env.VUE_APP_MATERIAL_URL;
 export default class MaterialRegistration extends Vue {
   idComponent: string = 'materialRegistration';
 
-  regKmat: any = null;
+  regKmat: { value: any, valid: boolean } = { value: null, valid: false };
 
-  regMvm: any = null;
+  regMvm: { value: any, valid: boolean } = { value: null, valid: false };
 
-  regMnozstvi: any = null;
+  regMnozstvi: { value: any, valid: boolean } = { value: null, valid: false };
 
-  regHmotnost: any = null;
+  regHmotnost: { value: any, valid: boolean } = { value: null, valid: false };
 
   optionsMvm: any = [];
 
@@ -90,26 +94,58 @@ export default class MaterialRegistration extends Vue {
     this.loadMaterialMvmItems();
   }
 
-  putNewId() {
+  checkInputs() {
     debugger;
-    const dataObj = {
-      hmotnost: 121,
-      kmat: '11114',
-      mnozstvi: 10,
-      mvm: '201912051955'
-    };
-    httpService.putDirect(material, dataObj).then((response) => {
-      debugger;
-    });
+    let res = 0;
+    if (this.regKmat && this.regKmat.value) {
+      res++;
+      this.regKmat.valid = true;
+    } else {
+      this.regKmat.valid = false;
+    }
+    if (this.regMvm && this.regMvm.value) {
+      res++;
+      this.regMvm.valid = true;
+    } else {
+      this.regMvm.valid = false;
+    }
+    if (this.regMnozstvi && this.regMnozstvi.value) {
+      res++;
+      this.regMnozstvi.valid = true;
+    } else {
+      this.regMnozstvi.valid = false;
+    }
+    if (this.regHmotnost && this.regHmotnost.value) {
+      res++;
+      this.regHmotnost.valid = true;
+    } else {
+      this.regHmotnost.valid = false;
+    }
+    return res === 4;
   }
 
-  putExistingId() {
-    const idParam = 'id=2';
-    const dataObj = { hmotnost: 120, mnozstvi: 11 };
-    httpService.putDirect(`${material}?${idParam}`, dataObj).then((response) => {
-      debugger;
-    });
+  putNewId() {
+    debugger;
+    if (this.checkInputs()) {
+      const dataObj = {
+        hmotnost: Number(this.regHmotnost.value),
+        kmat: this.regKmat.value,
+        mnozstvi: Number(this.regMnozstvi.value),
+        mvm: this.regMvm.value
+      };
+      // httpService.putDirect(material, dataObj).then((response) => {
+      //   debugger;
+      // });
+    }
   }
+
+  // putExistingId() {
+  //   const idParam = 'id=2';
+  //   const dataObj = { hmotnost: 120, mnozstvi: 11 };
+  //   httpService.putDirect(`${material}?${idParam}`, dataObj).then((response) => {
+  //     debugger;
+  //   });
+  // }
 
   loadMaterialMvmItems() {
     debugger;
@@ -170,6 +206,14 @@ export default class MaterialRegistration extends Vue {
     span {
       position: absolute;
       bottom: 20px;
+    }
+  }
+  .error {
+    input, .multiselect {
+      border:1px solid red;
+    }
+    span {
+      color: red;
     }
   }
 }
