@@ -23,12 +23,12 @@
     <div class="form-group reg-input" v-bind:class="{error: !regMnozstvi.valid}">
       <label for="mnozstvi">MNOZSTVI</label>
       <input type="text" class="form-control" id="mnozstvi" v-model="regMnozstvi.value">
-      <span v-if="!regMnozstvi.valid">Required!</span>
+      <span v-if="!regMnozstvi.valid">Required whole number!</span>
     </div>
     <div class="form-group reg-input" v-bind:class="{error: !regHmotnost.valid}">
       <label for="hmotnost">HMOTNOST</label>
       <input type="text" class="form-control" id="hmotnost" v-model="regHmotnost.value">
-      <span v-if="!regHmotnost.valid">Required!</span>
+      <span v-if="!regHmotnost.valid">Required whole number!</span>
     </div>
     <p class="confirm-btn">
       <span><button type="button" class="btn btn-primary" @click="putNewId">Registrovat</button></span>
@@ -77,13 +77,13 @@ const material = process.env.VUE_APP_MATERIAL_URL;
 export default class MaterialRegistration extends Vue {
   idComponent: string = 'materialRegistration';
 
-  regKmat: { value: any, valid: boolean } = { value: null, valid: false };
+  regKmat: { value: any, valid: boolean } = { value: null, valid: true };
 
-  regMvm: { value: any, valid: boolean } = { value: null, valid: false };
+  regMvm: { value: any, valid: boolean } = { value: null, valid: true };
 
-  regMnozstvi: { value: any, valid: boolean } = { value: null, valid: false };
+  regMnozstvi: { value: any, valid: boolean } = { value: null, valid: true };
 
-  regHmotnost: { value: any, valid: boolean } = { value: null, valid: false };
+  regHmotnost: { value: any, valid: boolean } = { value: null, valid: true };
 
   optionsMvm: any = [];
 
@@ -109,13 +109,13 @@ export default class MaterialRegistration extends Vue {
     } else {
       this.regMvm.valid = false;
     }
-    if (this.regMnozstvi && this.regMnozstvi.value) {
+    if (this.regMnozstvi && this.regMnozstvi.value && !Number.isInteger(this.regMnozstvi.value)) {
       res++;
       this.regMnozstvi.valid = true;
     } else {
       this.regMnozstvi.valid = false;
     }
-    if (this.regHmotnost && this.regHmotnost.value) {
+    if (this.regHmotnost && this.regHmotnost.value && !Number.isInteger(this.regHmotnost.value)) {
       res++;
       this.regHmotnost.valid = true;
     } else {
@@ -172,6 +172,7 @@ export default class MaterialRegistration extends Vue {
       this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADED });
       // this.messageBoxHide();
       this.optionsMvm = _.orderBy(_.uniqBy(this.optionsMvm, 'title'), ['title'], ['asc']);
+      debugger;
       [this.regMvm] = this.optionsMvm;
     });
   }
@@ -179,6 +180,7 @@ export default class MaterialRegistration extends Vue {
   onChangeMultiselect(event: any, id: any) {
     if (id === 'mvm1') {
       this.regMvm = event;
+      debugger;
     }
   }
 
@@ -211,6 +213,9 @@ export default class MaterialRegistration extends Vue {
   .error {
     input, .multiselect {
       border:1px solid red;
+      .multiselect__tags {
+        min-height: 30px !important;
+      }
     }
     span {
       color: red;
