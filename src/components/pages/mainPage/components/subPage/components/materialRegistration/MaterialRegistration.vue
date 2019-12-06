@@ -194,6 +194,7 @@ export default class MaterialRegistration extends Vue {
 </script>
 
 <style lang="scss" scoped>
+// @import "../node_modules/vue-multiselect/dist/vue-multiselect.min.css";
 .subcategory {
   .title, .text {
     margin: 10px;
@@ -223,6 +224,10 @@ export default class MaterialRegistration extends Vue {
     span {
       color: red;
     }
+  }
+  .multiselect .multiselect__tags {
+    border-color: #ced4da !important;
+    min-height: 38px !important;
   }
 }
 </style>
