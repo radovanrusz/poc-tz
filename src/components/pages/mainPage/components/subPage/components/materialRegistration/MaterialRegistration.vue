@@ -36,6 +36,13 @@
     <!-- <p class="confirm-btn">
       <span><button type="button" class="btn btn-primary" @click="putExistingId">Update</button></span>
     </p> -->
+    <message
+      :executed="message.executed"
+      :type="message.type"
+      :text="message.text"
+      :visibilityMessageRef="visibilityMessage"
+      v-if="message.show"
+    />
   </div>
 </template>
 
@@ -50,6 +57,7 @@ import { GeneralHelper } from '@/helpers/general.helper';
 import { HttpMockService, HttpService } from '@/services/http.service';
 import { Reference, AppMode } from '@/stores/mode/mode.types';
 import { MODE_LOADING, REFERENCE_INITIAL, MODE_LOADED } from '@/stores/mode/constants';
+import Message from '@/components/common/message/Message.vue';
 
 const PagesStore = namespace(PAGES);
 const ModeStore = namespace(MODE);
@@ -61,7 +69,8 @@ const material = process.env.VUE_APP_MATERIAL_URL;
 
 @Component({
   components: {
-    Multiselect
+    Multiselect,
+    Message
   },
   props: {
     title: {
@@ -91,6 +100,13 @@ export default class MaterialRegistration extends Vue {
 
   @ModeStore.Action setMode!:
     ({ reference, status }: { reference: Reference, status: AppMode }) => void;
+
+  message: { type: string, text: string, executed: boolean, show: boolean } = {
+    type: '',
+    text: '',
+    executed: false,
+    show: false
+  };
 
   created() {
     this.loadMaterialMvmItems();
@@ -135,8 +151,16 @@ export default class MaterialRegistration extends Vue {
         mnozstvi: Number(this.regMnozstvi.value),
         mvm: this.regMvm.title
       };
+      this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
       httpService.putDirect(material, dataObj).then((response) => {
         debugger;
+        this.messageBoxShow('success');
+      }, (error) => {
+        this.messageBoxShow('error');
+        console.log('error ', error);
+      }).finally(() => {
+        this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADED });
+        this.messageBoxHide();
       });
     }
   }
@@ -189,6 +213,29 @@ export default class MaterialRegistration extends Vue {
 
   customSelectMvm1({ title }: { title: string }): string {
     return title ? `${title}` : '';
+  }
+
+  messageBoxShow(type: string) {
+    if (type === 'success') {
+      this.message.executed = !this.message.executed;
+      this.message.text = 'Query executed successfully';
+      this.message.type = 'alert-success';
+      this.message.show = true;
+    } else if (type === 'error') {
+      this.message.executed = !this.message.executed;
+      this.message.text = 'Query failed';
+      this.message.type = 'alert-danger';
+      this.message.show = true;
+    }
+  }
+
+  messageBoxHide() {
+    this.message.executed = !this.message.executed;
+  }
+
+
+  visibilityMessage(obj: any) {
+    this.message.show = obj.visibility;
   }
 }
 </script>
