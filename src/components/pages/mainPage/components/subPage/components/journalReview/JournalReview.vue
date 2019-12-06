@@ -274,7 +274,7 @@ export default class JournalReview extends Vue {
   messageBoxHide() {
     this.messageBoxTimeout = setTimeout(() => {
       this.showMessage = false;
-    }, 50000);
+    }, 5000);
   }
 
 
