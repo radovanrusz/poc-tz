@@ -145,6 +145,8 @@ export default class JournalReview extends Vue {
 
   showMessage: boolean = false;
 
+  messageBoxTimeout: any = null;
+
   created() {
     this.loadJournalFilterItems();
 
@@ -240,23 +242,24 @@ export default class JournalReview extends Vue {
   }
 
   loadJournalItems() {
-    let status = MODE_LOADING;
-    const reference = REFERENCE_INITIAL;
-    this.setMode({ reference, status });
+    this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
     httpService.getDirect(this.generateUrl).then((response) => {
     // httpMockService.getMockJournalDelay().then((response) => {
-      this.messageBox('success');
+      this.messageBoxShow('success');
       this.itemsJournalFiltered = response.data;
     }, (error) => {
-      this.messageBox('error');
+      this.messageBoxShow('error');
       console.log('error ', error);
     }).finally(() => {
-      status = MODE_LOADED;
-      this.setMode({ reference, status });
+      this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADED });
+      this.messageBoxHide();
     });
   }
 
-  messageBox(type: string) {
+  messageBoxShow(type: string) {
+    if (this.messageBoxTimeout) {
+      clearTimeout(this.messageBoxTimeout);
+    }
     if (type === 'success') {
       this.message.text = 'Query executed successfully';
       this.message.type = 'alert-success';
@@ -268,9 +271,19 @@ export default class JournalReview extends Vue {
     }
   }
 
+  messageBoxHide() {
+    this.messageBoxTimeout = setTimeout(() => {
+      this.showMessage = false;
+    }, 50000);
+  }
+
+
   visibilityMessage(obj: any) {
     debugger;
     this.showMessage = obj.visibility;
+    if (this.messageBoxTimeout) {
+      clearTimeout(this.messageBoxTimeout);
+    }
   }
 }
 </script>
