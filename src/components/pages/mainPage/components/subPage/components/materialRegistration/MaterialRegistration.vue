@@ -7,8 +7,16 @@
       <input type="text" class="form-control" id="kmat" v-model="regKmat">
     </div>
     <div class="form-group reg-input">
-      <label for="mvm">MVM</label>
-      <input type="text" class="form-control" id="mvm" v-model="regMvm">
+      <label>MVM</label>
+      <multiselect
+      v-model="regMvm" :options="optionsMvm"
+      :custom-label="customSelectMvm1"
+      placeholder=""
+      label="title" track-by="title"
+      :show-labels="false"
+      :allow-empty="false"
+      @select="onChangeMultiselect($event, 'mvm1')">
+      </multiselect>
     </div>
     <div class="form-group reg-input">
       <label for="mnozstvi">MNOZSTVI</label>
@@ -21,9 +29,9 @@
     <p class="confirm-btn">
       <span><button type="button" class="btn btn-primary" @click="putNewId">Registrovat</button></span>
     </p>
-    <p class="confirm-btn">
+    <!-- <p class="confirm-btn">
       <span><button type="button" class="btn btn-primary" @click="putExistingId">Update</button></span>
-    </p>
+    </p> -->
   </div>
 </template>
 
@@ -73,6 +81,15 @@ export default class MaterialRegistration extends Vue {
 
   regHmotnost: any = null;
 
+  optionsMvm: any = [];
+
+  @ModeStore.Action setMode!:
+    ({ reference, status }: { reference: Reference, status: AppMode }) => void;
+
+  created() {
+    this.loadMaterialMvmItems();
+  }
+
   putNewId() {
     debugger;
     const dataObj = {
@@ -92,6 +109,45 @@ export default class MaterialRegistration extends Vue {
     httpService.putDirect(`${material}?${idParam}`, dataObj).then((response) => {
       debugger;
     });
+  }
+
+  loadMaterialMvmItems() {
+    debugger;
+    this.optionsMvm.push({ title: '' });
+
+    this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
+    // httpService.getDirect(this.generateUrl).then((response) => {
+    httpMockService.getMockDataMaterialMvm1Delay().then((response) => {
+      debugger;
+      const resData: any = response;
+      Object.keys(resData).forEach((key) => {
+        for (let i = 0; i < resData[key].length; i++) {
+          if (key === 'mvm1') {
+            this.optionsMvm.push({ title: resData[key][i] });
+          }
+        }
+      });
+      // this.messageBoxShow('success');
+      // this.itemsJournalFiltered = response.data;
+    }, (error) => {
+      // this.messageBoxShow('error');
+      console.log('error ', error);
+    }).finally(() => {
+      this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADED });
+      // this.messageBoxHide();
+      this.optionsMvm = _.orderBy(_.uniqBy(this.optionsMvm, 'title'), ['title'], ['asc']);
+      [this.regMvm] = this.optionsMvm;
+    });
+  }
+
+  onChangeMultiselect(event: any, id: any) {
+    if (id === 'mvm1') {
+      this.regMvm = event;
+    }
+  }
+
+  customSelectMvm1({ title }: { title: string }): string {
+    return title ? `${title}` : '';
   }
 }
 </script>
