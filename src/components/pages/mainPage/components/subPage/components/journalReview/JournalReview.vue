@@ -296,7 +296,7 @@ export default class JournalReview extends Vue {
     margin: 10px;
     float: left;
     &#kmat, &#mvm1, &#mvm2{
-      width: 100px;
+      width: 140px;
     }
   }
   .table {

@@ -97,6 +97,9 @@ export default class MainPage extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.container {
+  max-width: 1400px;
+}
 .btn-item {
   float: right;
   i {
