@@ -7,6 +7,9 @@
       <div v-else-if="currentPageId === 'rm' && currentSubpageMaterialRegistrationInputs">
         <material-registration :title="currentSubpageTitle" :text="currentSubpageText"/>
       </div>
+      <div v-else-if="currentPageId === 'sm' && currentSubpageJournalFilterTable">
+        <material-update :title="currentSubpageTitle" :text="currentSubpageText"/>
+      </div>
       <div v-else>
         <common-subpage :title="currentSubpageTitle" :text="currentSubpageText"/>
       </div>
@@ -27,6 +30,7 @@ import { Reference, AppMode } from '@/stores/mode/mode.types';
 import { MODE_LOADING, REFERENCE_INITIAL, MODE_LOADED } from '@/stores/mode/constants';
 import JournalReview from './components/journalReview/JournalReview.vue';
 import MaterialRegistration from './components/materialRegistration/MaterialRegistration.vue';
+import MaterialUpdate from './components/materialUpdate/MaterialUpdate.vue';
 import CommonSubpage from './components/commonSubpage/CommonSubpage.vue';
 
 const PagesStore = namespace(PAGES);
@@ -46,6 +50,7 @@ const material = process.env.VUE_APP_MATERIAL_URL;
   components: {
     JournalReview,
     MaterialRegistration,
+    MaterialUpdate,
     CommonSubpage
   },
   props: {
