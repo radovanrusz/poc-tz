@@ -44,7 +44,7 @@ const actions: ActionTree<PagesStore, RootState> = {
     }
     debugger;
     if (userPages && userPages.length > 0) {
-      userPages.sort((a, b) => (a.id < b.id ? -1 : 1));
+      // userPages.sort((a, b) => (a.id < b.id ? -1 : 1));
       currentPage = userPages[DEFAULT_CURRENTPAGE_INDEX];
       if (currentPage && currentPage.subpages && currentPage.subpages.length > 0) {
         currentPage.currentSubpage = currentPage.subpages[DEFAULT_CURRENTSUBPAGE_INDEX];

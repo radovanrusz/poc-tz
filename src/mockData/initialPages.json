@@ -103,5 +103,32 @@
                 }
             }
         ]
+    },
+    {
+        "id": "pm",
+        "name": "Presun materialu",
+        "allowed": {
+            "read": ["manager", "worker", "coworker"],
+            "write": ["manager", "worker"]
+        },
+        "subpages": [
+            {
+                "id": "home",
+                "name": "Domu presun materialu",
+                "content": {
+                    "title": "Presun material home",
+                    "text": "vitajte na presun materialu home"
+                }
+            },
+            {
+                "id": "personalAdministration",
+                "name": "Osobni administrace presun materialu",
+                "content": {
+                    "title": "Presun materialu administrace",
+                    "text": "vitajte na presun materialu administrace",
+                    "filterTable": true
+                }
+            }
+        ]
     }
 ]
