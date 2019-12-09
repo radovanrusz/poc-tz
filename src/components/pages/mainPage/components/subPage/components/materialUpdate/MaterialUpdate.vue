@@ -53,14 +53,15 @@
           <th>MVM</th>
           <th>MNOZSTVI</th>
           <th>HMOTNOST</th>
+          <th>MODIFIKACE</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in itemsMaterialFiltered" :key="item._id" :id="item._id" :index="index"
-          @mouseenter="itemOver = index" @mouseleave="itemOver = null">
+          @mouseenter="itemOver=index" @mouseleave="itemOver=null">
             <td>
               <span v-if="itemOver === index">
-                 <input type="text" class="form-control" v-model="item.kmat">
+                 <input type="text" class="form-control" v-model="item.kmat" v-on:input="inputChanged(index, item)">
               </span>
               <span v-if="itemOver !== index">{{item.kmat}}</span>
             </td>
@@ -81,6 +82,9 @@
                  <input type="text" class="form-control" v-model="item.hmotnost">
               </span>
               <span v-if="itemOver !== index">{{item.hmotnost}}</span>
+            </td>
+            <td>
+              <i class="fa fa-check" aria-hidden="true"></i>
             </td>
           </tr>
         </tbody>
@@ -152,6 +156,8 @@ export default class MaterialUpdate extends Vue {
 
   itemsMaterialFiltered: any = [];
 
+  itemsMaterialFilteredOriginal: any = [];
+
   itemOver: any = null;
 
   @PagesStore.Getter currentPageSubpage!: Subpage;
@@ -181,23 +187,14 @@ export default class MaterialUpdate extends Vue {
     // ];
   }
 
-  mouseOverItem(index: number, item: any) {
+  inputChanged(index: any, item: any) {
     debugger;
-    if (item) {
-      this.itemOver = {
-        index,
-        item
-      };
+    if (this.itemsMaterialFilteredOriginal && this.itemsMaterialFilteredOriginal[index]) {
+      const itemOriginal = this.itemsMaterialFilteredOriginal[index];
+      if (itemOriginal !== item) {
+        console.log('changed ', index);
+      }
     }
-  }
-
-  mouseOverItemCurrent(itemId: string): Boolean {
-    debugger;
-    let res = false;
-    if (itemId && this.itemOver.item._id === itemId) {
-      res = true;
-    }
-    return res;
   }
 
   onChangeMultiselect(event: any, id: any) {
@@ -289,6 +286,7 @@ export default class MaterialUpdate extends Vue {
     // httpMockService.getMockJournalDelay().then((response) => {
       this.messageBoxShow('success');
       this.itemsMaterialFiltered = response.data.materials;
+      this.itemsMaterialFilteredOriginal = response.data.materials;
     }, (error) => {
       this.messageBoxShow('error');
       console.log('error ', error);
