@@ -56,11 +56,32 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in itemsMaterialFiltered" :key="item._id" :id="item._id" :index="index">
-            <td>{{item.kmat}}</td>
-            <td>{{item.mvm}}</td>
-            <td>{{item.mnozstvi}}</td>
-            <td>{{item.hmotnost}}</td>
+          <tr v-for="(item, index) in itemsMaterialFiltered" :key="item._id" :id="item._id" :index="index"
+          @mouseenter="itemOver = index" @mouseleave="itemOver = null">
+            <td>
+              <span v-if="itemOver === index">
+                 <input type="text" class="form-control" v-model="item.kmat">
+              </span>
+              <span v-if="itemOver !== index">{{item.kmat}}</span>
+            </td>
+            <td>
+              <span v-if="itemOver === index">
+                 <input type="text" class="form-control" v-model="item.mvm">
+              </span>
+              <span v-if="itemOver !== index">{{item.mvm}}</span>
+            </td>
+            <td>
+              <span v-if="itemOver === index">
+                 <input type="text" class="form-control" v-model="item.mnozstvi">
+              </span>
+              <span v-if="itemOver !== index">{{item.mnozstvi}}</span>
+            </td>
+            <td>
+              <span v-if="itemOver === index">
+                 <input type="text" class="form-control" v-model="item.hmotnost">
+              </span>
+              <span v-if="itemOver !== index">{{item.hmotnost}}</span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -131,6 +152,8 @@ export default class MaterialUpdate extends Vue {
 
   itemsMaterialFiltered: any = [];
 
+  itemOver: any = null;
+
   @PagesStore.Getter currentPageSubpage!: Subpage;
 
   @PagesStore.Getter currentPage!: Page;
@@ -156,6 +179,25 @@ export default class MaterialUpdate extends Vue {
     //   { title: 'Material3', desc: 'Balik tesneni' },
     //   { title: 'Material4', desc: 'Balik podloziek' }
     // ];
+  }
+
+  mouseOverItem(index: number, item: any) {
+    debugger;
+    if (item) {
+      this.itemOver = {
+        index,
+        item
+      };
+    }
+  }
+
+  mouseOverItemCurrent(itemId: string): Boolean {
+    debugger;
+    let res = false;
+    if (itemId && this.itemOver.item._id === itemId) {
+      res = true;
+    }
+    return res;
   }
 
   onChangeMultiselect(event: any, id: any) {
