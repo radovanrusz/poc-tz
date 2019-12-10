@@ -97,7 +97,8 @@
       </table>
     </p>
     <div class="bottom-part">
-      <button type="button" class="btn btn-primary" @click="updateChanges" :disabled="hasNoModifiedItems(modifiedItems)">Uloz zmeny</button>
+      <span v-if="!hasNoModifiedItems(modifiedItems)"><i class="fa fa-arrow-circle-right" style="color:red; margin-right: 10px; font-size: 20px;" aria-hidden="true"></i></span>
+      <button type="button" class="btn btn-primary" @click="updateChangesAndStore" :disabled="hasNoModifiedItems(modifiedItems)">Uloz zmeny</button>
     </div>
     <message
       :executed="message.executed"
@@ -230,18 +231,9 @@ export default class MaterialUpdate extends Vue {
     this.modifiedItems = {};
   }
 
-  // isActive() {
-  //   debugger;
-  //   let res = 0;
-  //   for (let i = 0; i < this.itemsMaterialFiltered.length; i++) {
-  //     if (this.itemsMaterialFiltered[i] && this.itemsMaterialFiltered[i].diff && this.itemsMaterialFiltered[i].diff === 'modified') {
-  //       res++;
-  //     }
-  //   }
-  //   if (res > 0) {
-  //     this.saveIsActive = true;
-  //   }
-  // }
+  updateChangesAndStore() {
+    this.updateChanges();
+  }
 
   onChangeMultiselect(event: any, id: any) {
     if (id === 'kmat') {
@@ -415,6 +407,9 @@ export default class MaterialUpdate extends Vue {
     width: 100%;
     text-align: right;
     padding: 10px;
+    span {
+      vertical-align: sub;
+    }
   }
 }
 </style>
