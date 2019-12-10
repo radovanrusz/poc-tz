@@ -233,7 +233,7 @@ export default class MaterialUpdate extends Vue {
 
   updateChangesAndStore() {
     debugger;
-    const dataObj = this.modifiedItems;
+    const dataObj = _.values(this.modifiedItems);
     this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
     httpService.putDirect(materialBaseUrl, dataObj).then((response) => {
       debugger;
