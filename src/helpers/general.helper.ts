@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { Page, Subpage } from '@/stores/pages/pages.types';
 import { PAGE_INITIAL } from '@/stores/pages/constants';
 
@@ -94,6 +95,15 @@ export class GeneralHelper {
       const ar = arrItemsObj.filter((item: any) => item._id === arrIds[i]);
       res = [...res, ...ar];
     }
+    return res;
+  }
+
+  renderedOriginal(items: any[]) {
+    debugger;
+    const res: any = [];
+    items.forEach((item) => {
+      res.push({ rendered: _.clone(item), original: _.clone(item) });
+    });
     return res;
   }
 }

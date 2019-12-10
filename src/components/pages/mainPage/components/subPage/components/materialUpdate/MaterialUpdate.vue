@@ -53,38 +53,43 @@
           <th>MVM</th>
           <th>MNOZSTVI</th>
           <th>HMOTNOST</th>
-          <th>MODIFIKACE</th>
+          <th>STATUS</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in itemsMaterialFiltered" :key="item._id" :id="item._id" :index="index"
-          @mouseenter="itemOver=index" @mouseleave="itemOver=null">
+          <tr v-for="(item, index) in itemsMaterialFiltered" :key="item._id" :id="item.rendered._id" :index="index"
+          @mouseenter="itemOver=index" @mouseleave="itemOver=null" class="input-item">
             <td>
               <span v-if="itemOver === index">
-                 <input type="text" class="form-control" v-model="item.kmat" v-on:input="inputChanged(index, item)">
+                 <input type="text" class="form-control" v-model="item.rendered.kmat">
               </span>
-              <span v-if="itemOver !== index">{{item.kmat}}</span>
+              <span v-if="itemOver !== index">{{item.rendered.kmat}}</span>
             </td>
             <td>
               <span v-if="itemOver === index">
-                 <input type="text" class="form-control" v-model="item.mvm">
+                 <input type="text" class="form-control" v-model="item.rendered.mvm">
               </span>
-              <span v-if="itemOver !== index">{{item.mvm}}</span>
+              <span v-if="itemOver !== index">{{item.rendered.mvm}}</span>
             </td>
             <td>
               <span v-if="itemOver === index">
-                 <input type="text" class="form-control" v-model="item.mnozstvi">
+                 <input type="text" class="form-control" v-model="item.rendered.mnozstvi">
               </span>
-              <span v-if="itemOver !== index">{{item.mnozstvi}}</span>
+              <span v-if="itemOver !== index">{{item.rendered.mnozstvi}}</span>
             </td>
             <td>
               <span v-if="itemOver === index">
-                 <input type="text" class="form-control" v-model="item.hmotnost">
+                 <input type="text" class="form-control" v-model="item.rendered.hmotnost">
               </span>
-              <span v-if="itemOver !== index">{{item.hmotnost}}</span>
+              <span v-if="itemOver !== index">{{item.rendered.hmotnost}}</span>
             </td>
             <td>
-              <i class="fa fa-check" aria-hidden="true"></i>
+              <span v-if="inputChanged(index, item)">
+                <i class="fa fa-arrow-circle-left" style="color:red" aria-hidden="true"></i> Modified
+              </span>
+              <span v-if="inputSaved(index, item)">
+                <i class="fa fa-check" style="color:green" aria-hidden="true"></i> Saved
+              </span>
             </td>
           </tr>
         </tbody>
@@ -156,8 +161,6 @@ export default class MaterialUpdate extends Vue {
 
   itemsMaterialFiltered: any = [];
 
-  itemsMaterialFilteredOriginal: any = [];
-
   itemOver: any = null;
 
   @PagesStore.Getter currentPageSubpage!: Subpage;
@@ -187,14 +190,25 @@ export default class MaterialUpdate extends Vue {
     // ];
   }
 
-  inputChanged(index: any, item: any) {
+  inputChanged(index: any, item: any): Boolean|any {
     debugger;
-    if (this.itemsMaterialFilteredOriginal && this.itemsMaterialFilteredOriginal[index]) {
-      const itemOriginal = this.itemsMaterialFilteredOriginal[index];
-      if (itemOriginal !== item) {
-        console.log('changed ', index);
+    if (item) {
+      if (!_.isEqual(item.rendered, item.original)) {
+        item['diff'] = true;
+        return true;
       }
     }
+    return false;
+  }
+
+  inputSaved(index: any, item: any): Boolean|any {
+    debugger;
+    if (item) {
+      if (_.isEqual(item.rendered, item.original) && item.diff) {
+        return true;
+      }
+    }
+    return false;
   }
 
   onChangeMultiselect(event: any, id: any) {
@@ -285,8 +299,7 @@ export default class MaterialUpdate extends Vue {
     httpService.getDirect(this.generateUrl).then((response) => {
     // httpMockService.getMockJournalDelay().then((response) => {
       this.messageBoxShow('success');
-      this.itemsMaterialFiltered = response.data.materials;
-      this.itemsMaterialFilteredOriginal = response.data.materials;
+      this.itemsMaterialFiltered = generalHelper.renderedOriginal(response.data.materials);
     }, (error) => {
       this.messageBoxShow('error');
       console.log('error ', error);
@@ -332,6 +345,14 @@ export default class MaterialUpdate extends Vue {
     width: 80px;
     &#kmat, &#mvm {
       width: 130px;
+    }
+  }
+  .input-item {
+    td:nth-of-type(1), td:nth-of-type(2) {
+      width: 160px;
+    }
+    td:nth-of-type(3), td:nth-of-type(4) {
+      width: 80px;
     }
   }
   .search-dropdown {

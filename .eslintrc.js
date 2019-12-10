@@ -21,7 +21,9 @@ module.exports = {
     'max-len': 'off',
     'no-param-reassign': ['error', { props: true, ignorePropertyModificationsFor: ['state'] }],
     'comma-dangle': ['error', 'never'],
-    'no-underscore-dangle': ['error', { allow: ['_id'] }]
+    'no-underscore-dangle': ['error', { allow: ['_id'] }],
+    'dot-notation': 'off',
+    'no-param-reassign': 'off'
   },
   parserOptions: {
     parser: 'typescript-eslint-parser'
