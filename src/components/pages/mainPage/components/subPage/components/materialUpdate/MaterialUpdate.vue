@@ -232,7 +232,20 @@ export default class MaterialUpdate extends Vue {
   }
 
   updateChangesAndStore() {
-    this.updateChanges();
+    debugger;
+    const dataObj = this.modifiedItems;
+    this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
+    httpService.putDirect(materialBaseUrl, dataObj).then((response) => {
+      debugger;
+      this.messageBoxShow('success');
+      this.updateChanges();
+    }, (error) => {
+      this.messageBoxShow('error');
+      console.log('error ', error);
+    }).finally(() => {
+      this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADED });
+      this.messageBoxHide();
+    });
   }
 
   onChangeMultiselect(event: any, id: any) {
