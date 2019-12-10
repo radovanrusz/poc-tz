@@ -61,33 +61,34 @@
           @mouseenter="itemOver=index" @mouseleave="itemOver=null" class="input-item">
             <td>
               <span v-if="itemOver === index">
-                 <input type="text" class="form-control" v-model="item.rendered.kmat">
+                 <input type="text" class="form-control" v-model="item.rendered.kmat" @input="inputChanged(index, item)">
               </span>
               <span v-if="itemOver !== index">{{item.rendered.kmat}}</span>
             </td>
             <td>
               <span v-if="itemOver === index">
-                 <input type="text" class="form-control" v-model="item.rendered.mvm">
+                 <input type="text" class="form-control" v-model="item.rendered.mvm" @input="inputChanged(index, item)">
               </span>
               <span v-if="itemOver !== index">{{item.rendered.mvm}}</span>
             </td>
             <td>
               <span v-if="itemOver === index">
-                 <input type="text" class="form-control" v-model="item.rendered.mnozstvi">
+                 <input type="text" class="form-control" v-model="item.rendered.mnozstvi" @input="inputChanged(index, item)">
               </span>
               <span v-if="itemOver !== index">{{item.rendered.mnozstvi}}</span>
             </td>
             <td>
               <span v-if="itemOver === index">
-                 <input type="text" class="form-control" v-model="item.rendered.hmotnost">
+                 <input type="text" class="form-control" v-model="item.rendered.hmotnost" @input="inputChanged(index, item)">
               </span>
               <span v-if="itemOver !== index">{{item.rendered.hmotnost}}</span>
             </td>
             <td>
-              <span v-if="inputChanged(index, item)">
+              <!-- <span v-if="inputChanged(index, item)"> -->
+              <span v-if="item.diff==='modified'">
                 <i class="fa fa-arrow-circle-left" style="color:red" aria-hidden="true"></i> Modified
               </span>
-              <span v-if="inputSaved(index, item)">
+              <span v-if="item.diff==='saved'">
                 <i class="fa fa-check" style="color:green" aria-hidden="true"></i> Saved
               </span>
             </td>
@@ -95,6 +96,9 @@
         </tbody>
       </table>
     </p>
+    <div class="bottom-part">
+      <button type="button" class="btn btn-primary" @click="updateChanges" :disabled="hasNoModifiedItems(modifiedItems)">Uloz zmeny</button>
+    </div>
     <message
       :executed="message.executed"
       :type="message.type"
@@ -106,7 +110,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+  Component,
+  Prop,
+  Vue,
+  Watch
+} from 'vue-property-decorator';
 import _ from 'lodash';
 import Multiselect from 'vue-multiselect';
 import { namespace } from 'vuex-class';
@@ -163,6 +172,8 @@ export default class MaterialUpdate extends Vue {
 
   itemOver: any = null;
 
+  modifiedItems: any = {};
+
   @PagesStore.Getter currentPageSubpage!: Subpage;
 
   @PagesStore.Getter currentPage!: Page;
@@ -190,26 +201,47 @@ export default class MaterialUpdate extends Vue {
     // ];
   }
 
-  inputChanged(index: any, item: any): Boolean|any {
+  hasNoModifiedItems(obj: any): Boolean {
     debugger;
-    if (item) {
-      if (!_.isEqual(item.rendered, item.original)) {
-        item['diff'] = true;
-        return true;
-      }
+    if (obj) {
+      return _.keys(obj).length === 0;
     }
     return false;
   }
 
-  inputSaved(index: any, item: any): Boolean|any {
+  inputChanged(index: any, item: any) {
     debugger;
-    if (item) {
-      if (_.isEqual(item.rendered, item.original) && item.diff) {
-        return true;
-      }
+    if (item && !_.isEqual(item.rendered, item.original)) {
+      item['diff'] = 'modified';
+      this.modifiedItems[item.rendered.id] = _.clone(item.rendered);
+    } else {
+      delete item.diff;
+      delete this.modifiedItems[item.rendered.id];
     }
-    return false;
   }
+
+  updateChanges() {
+    debugger;
+    this.itemsMaterialFiltered.forEach((item: any) => {
+      if (item.diff && item.diff === 'modified') {
+        item.diff = 'saved';
+      }
+    });
+    this.modifiedItems = {};
+  }
+
+  // isActive() {
+  //   debugger;
+  //   let res = 0;
+  //   for (let i = 0; i < this.itemsMaterialFiltered.length; i++) {
+  //     if (this.itemsMaterialFiltered[i] && this.itemsMaterialFiltered[i].diff && this.itemsMaterialFiltered[i].diff === 'modified') {
+  //       res++;
+  //     }
+  //   }
+  //   if (res > 0) {
+  //     this.saveIsActive = true;
+  //   }
+  // }
 
   onChangeMultiselect(event: any, id: any) {
     if (id === 'kmat') {
@@ -306,6 +338,7 @@ export default class MaterialUpdate extends Vue {
     }).finally(() => {
       this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADED });
       this.messageBoxHide();
+      this.modifiedItems = {};
     });
   }
 
@@ -364,6 +397,7 @@ export default class MaterialUpdate extends Vue {
   }
   .table {
     float: left;
+    margin: 0;
   }
   .confirm-btn {
     float: left;
@@ -374,6 +408,13 @@ export default class MaterialUpdate extends Vue {
       position: absolute;
       bottom: 20px;
     }
+  }
+  .bottom-part {
+    float: left;
+    position: relative;
+    width: 100%;
+    text-align: right;
+    padding: 10px;
   }
 }
 </style>
