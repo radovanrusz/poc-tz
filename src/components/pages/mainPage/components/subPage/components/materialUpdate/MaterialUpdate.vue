@@ -224,6 +224,10 @@ export default class MaterialUpdate extends Vue {
       } else if (item.rendered.hmotnost === '') {
         item.rendered.hmotnost = item.original.hmotnost;
       }
+      item.rendered.kmat = item.rendered.kmat.trim();
+      item.rendered.mvm = item.rendered.mvm.trim();
+      item.rendered.mnozstvi = item.rendered.mnozstvi.trim();
+      item.rendered.hmotnost = item.rendered.hmotnost.trim();
     } else {
       delete item.diff;
       delete this.modifiedItems[item.rendered.id];
