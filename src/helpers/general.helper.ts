@@ -102,8 +102,15 @@ export class GeneralHelper {
     debugger;
     const res: any = [];
     items.forEach((item) => {
-      res.push({ rendered: _.clone(item), original: _.clone(item) });
+      res.push({ rendered: this.stringSpace(_.clone(item)), original: this.stringSpace(_.clone(item)) });
     });
     return res;
+  }
+
+  stringSpace(itemObj: any): any {
+    Object.keys(itemObj).forEach((key, index) => {
+      itemObj[key] = String(itemObj[key]).trim();
+    });
+    return itemObj;
   }
 }
