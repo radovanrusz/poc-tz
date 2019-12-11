@@ -164,7 +164,7 @@ export default class MaterialRegistration extends Vue {
         mvm: this.regMvm.title
       };
       this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
-      httpService.putDirect(material, dataObj).then((response) => {
+      httpService.putDirect(material, [dataObj]).then((response) => {
         debugger;
         this.messageBoxShow('success');
         this.initialRegData();
