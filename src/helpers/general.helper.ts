@@ -113,4 +113,11 @@ export class GeneralHelper {
     });
     return itemObj;
   }
+
+  renderedToOriginalDiffOut(items: any[]) {
+    items.forEach((item) => {
+      item.original = _.clone(item.rendered);
+      delete item.diff;
+    });
+  }
 }

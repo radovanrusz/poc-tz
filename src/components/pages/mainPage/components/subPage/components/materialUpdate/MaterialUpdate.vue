@@ -229,6 +229,9 @@ export default class MaterialUpdate extends Vue {
       }
     });
     this.modifiedItems = {};
+    setTimeout(() => {
+      generalHelper.renderedToOriginalDiffOut(this.itemsMaterialFiltered);
+    }, 1000);
   }
 
   updateChangesAndStore() {
