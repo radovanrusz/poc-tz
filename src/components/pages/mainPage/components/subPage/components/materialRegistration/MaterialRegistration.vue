@@ -139,13 +139,13 @@ export default class MaterialRegistration extends Vue {
     } else {
       this.regMvmValid = false;
     }
-    if (this.regMnozstvi && this.regMnozstvi.value && Math.floor(this.regMnozstvi.value) == this.regMnozstvi.value) {
+    if (this.regMnozstvi && this.regMnozstvi.value && Math.floor(this.regMnozstvi.value) === Number(this.regMnozstvi.value)) {
       res++;
       this.regMnozstvi.valid = true;
     } else {
       this.regMnozstvi.valid = false;
     }
-    if (this.regHmotnost && this.regHmotnost.value && Math.floor(this.regHmotnost.value) == this.regHmotnost.value) {
+    if (this.regHmotnost && this.regHmotnost.value && Math.floor(this.regHmotnost.value) === Number(this.regHmotnost.value)) {
       res++;
       this.regHmotnost.valid = true;
     } else {
