@@ -215,6 +215,15 @@ export default class MaterialUpdate extends Vue {
     if (item && !_.isEqual(item.rendered, item.original)) {
       item['diff'] = 'modified';
       this.modifiedItems[item.rendered.id] = _.clone(item.rendered);
+      if (item.rendered.kmat === '') {
+        item.rendered.kmat = item.original.kmat;
+      } else if (item.rendered.mvm === '') {
+        item.rendered.mvm = item.original.mvm;
+      } else if (item.rendered.mnozstvi === '') {
+        item.rendered.mnozstvi = item.original.mnozstvi;
+      } else if (item.rendered.hmotnost === '') {
+        item.rendered.hmotnost = item.original.hmotnost;
+      }
     } else {
       delete item.diff;
       delete this.modifiedItems[item.rendered.id];
