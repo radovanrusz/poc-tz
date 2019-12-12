@@ -66,6 +66,7 @@ const httpService = new HttpService();
 const httpMockService = new HttpMockService();
 
 const material = process.env.VUE_APP_MATERIAL_URL;
+const materialMvms = process.env.VUE_APP_MATERIAL_MVMS;
 
 @Component({
   components: {
@@ -193,16 +194,19 @@ export default class MaterialRegistration extends Vue {
 
     this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
     // httpService.getDirect(this.generateUrl).then((response) => {
-    httpMockService.getMockDataMaterialMvm1Delay().then((response) => {
+    // httpMockService.getMockDataMaterialMvm1Delay().then((response) => {
+    httpService.getDirect(materialMvms).then((response) => {
       debugger;
-      const resData: any = response;
-      Object.keys(resData).forEach((key) => {
-        for (let i = 0; i < resData[key].length; i++) {
-          if (key === 'mvm1') {
-            this.optionsMvm.push({ title: resData[key][i] });
-          }
-        }
-      });
+      const resData: any = response.data.mvms;
+      // Object.keys(resData).forEach((key) => {
+      // for (let i = 0; i < resData[key].length; i++) {
+      for (let i = 0; i < resData.length; i++) {
+        // if (key === 'mvms') {
+        // this.optionsMvm.push({ title: resData[key][i].mvm });
+        this.optionsMvm.push({ title: resData[i].mvm });
+        // }
+      }
+      // });
       // this.messageBoxShow('success');
       // this.itemsJournalFiltered = response.data;
     }, (error) => {
