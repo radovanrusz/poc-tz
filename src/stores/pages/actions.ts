@@ -27,8 +27,14 @@ const actions: ActionTree<PagesStore, RootState> = {
       });
     })
   },
-  userPagesData({ commit, state }: ActionContext<PagesStore, RootState>, { role }: { role: string }) {
+  userPagesData({ commit, state }: ActionContext<PagesStore, RootState>, { role }: { role: string|string[] }) {
     debugger;
+    let roleUser = '';
+    if (typeof role === 'string') {
+      roleUser = role;
+    } else if (Array.isArray(role)) {
+      roleUser = role[0];
+    }
     const allPages: Page[] = state.allPages;
     let userPages: any[] = [];
     let currentPage: any = {};
@@ -36,7 +42,7 @@ const actions: ActionTree<PagesStore, RootState> = {
     for (let i = 0; i < allPages.length; i++) {
       if (allPages[i] && allPages[i].allowed) {
         debugger;
-        const current: any = generalHelper.processRole(role, allPages[i]);
+        const current: any = generalHelper.processRole(roleUser, allPages[i]);
         if (current && current.allowed && (current.allowed.read || current.allowed.write)) {
           userPages.push(current);
         }

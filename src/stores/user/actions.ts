@@ -7,20 +7,23 @@ const httpMockService = new HttpMockService();
 
 const httpService = new HttpService();
 
+const loginUrl = process.env.VUE_APP_LOGIN_URL;
+
 const actions: ActionTree<UserStore, RootState> = {
   loginUser({ commit }: ActionContext<UserStore, RootState>, { name, password }: { name: string, password: string }): Promise<boolean> {
     return new Promise((resolve, reject) => {
       debugger;
-      httpMockService.getMockAllowedCredentialsDelay({ name, password }).then((response: any) => {
+      // httpMockService.getMockAllowedCredentialsDelay({ name, password }).then((response: any) => {
       // httpService.get('authenticate', { params: { name, password } }).then((response) => {
       // httpService.post('authenticate', { credentials: { name, password } }).then((response) => {
+      httpService.postDirect(loginUrl, { name, password }).then((response) => {
         // const rr: any = response;  // mock response
         // const res: any = response.data; // server response
         /* eslint-disable */
         debugger;
-        const res: any = response; // server response
+        const res: any = response.data; // server response
         if (res && res.statusCase && res.statusCase === 'ok') {
-          commit('loginUser', { id: res.id, name: res.name, email: res.email, role: res.role });
+          commit('loginUser', { id: res.id, name: res.name, email: res.email, role: res.role[0] });
           resolve(res);
         } else {
           resolve(false);

@@ -113,21 +113,6 @@ export class HttpService {
     return Vue.axios.get(`${this.formedURL}${endpoint}`, { params });
   }
 
-  /** GET request
-   * @param endpoint :string, endpoint name
-   * @returns Promise<any>
-  */
-  public getDirect(url: string): Promise<any> {
-    /* eslint-disable */
-    debugger;
-    return Vue.axios.get(url);
-  }
-
-  public putDirect(url: string, obj: any): Promise<any> {
-    debugger;
-    return Vue.axios.put(`${url}`, obj);
-  }
-
   /** POST request
    * @param url :string, endpoint name
    * @param body : post body content
@@ -136,5 +121,21 @@ export class HttpService {
   public post(endpoint: string, body: any): Promise<any> {
     console.log('protocol ',this.protocol, ' hostname ', this.hostname, ' formedURL ', this.formedURL);
     return Vue.axios.post(`${this.formedURL}${endpoint}`, body);
+  }
+
+  public getDirect(url: string, headers: any = {}): Promise<any> {
+    /* eslint-disable */
+    debugger;
+    return Vue.axios.get(url);
+  }
+
+  public putDirect(url: string, obj: any, headers: any = {}): Promise<any> {
+    debugger;
+    return Vue.axios.put(`${url}`, obj);
+  }
+
+  public postDirect(url: string, obj: any, headers: any = {}): Promise<any> {
+    debugger;
+    return Vue.axios.post(`${url}`, obj);
   }
 }
