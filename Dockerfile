@@ -30,7 +30,7 @@ ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 # install simple http server for serving static content
-##RUN npm install -g http-server
+RUN npm install -g http-server
 
 # make the 'app' folder the current working directory
 WORKDIR /app
