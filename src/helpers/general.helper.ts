@@ -98,16 +98,27 @@ export class GeneralHelper {
     return res;
   }
 
+  getTypes(itemObj: any): any {
+    Object.keys(itemObj).forEach((key, index) => {
+      itemObj[key] = typeof itemObj[key];
+    });
+    return itemObj;
+  }
+
   renderedOriginal(items: any[]) {
     debugger;
     const res: any = [];
     items.forEach((item) => {
-      res.push({ rendered: this.stringSpace(_.clone(item)), original: this.stringSpace(_.clone(item)) });
+      res.push({
+        rendered: this.trimString(_.clone(item)),
+        original: this.trimString(_.clone(item)),
+        type: this.getTypes(item)
+      });
     });
     return res;
   }
 
-  stringSpace(itemObj: any): any {
+  trimString(itemObj: any): any {
     Object.keys(itemObj).forEach((key, index) => {
       itemObj[key] = String(itemObj[key]).trim();
     });
@@ -119,5 +130,19 @@ export class GeneralHelper {
       item.original = _.clone(item.rendered);
       delete item.diff;
     });
+  }
+
+  typeReset(itemObjR: any, itemObjT: any): any {
+    debugger;
+    Object.keys(itemObjT).forEach((key, index) => {
+      if (itemObjT[key] === 'string') {
+        itemObjR[key] = String(itemObjR[key]);
+      } else if (itemObjT[key] === 'number') {
+        itemObjR[key] = Number(itemObjR[key]);
+      } else if (itemObjT[key] === 'boolean') {
+        itemObjR[key] = Boolean(itemObjR[key]);
+      }
+    });
+    return itemObjR;
   }
 }

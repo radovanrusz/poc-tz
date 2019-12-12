@@ -130,7 +130,7 @@ import Message from '@/components/common/message/Message.vue';
 
 const PagesStore = namespace(PAGES);
 const ModeStore = namespace(MODE);
-const generalHelper = new GeneralHelper();
+const gh = new GeneralHelper();
 const httpService = new HttpService();
 const httpMockService = new HttpMockService();
 
@@ -203,7 +203,6 @@ export default class MaterialUpdate extends Vue {
   }
 
   hasNoModifiedItems(obj: any): Boolean {
-    debugger;
     if (obj) {
       return _.keys(obj).length === 0;
     }
@@ -214,7 +213,7 @@ export default class MaterialUpdate extends Vue {
     debugger;
     if (item && !_.isEqual(item.rendered, item.original)) {
       item['diff'] = 'modified';
-      this.modifiedItems[item.rendered.id] = _.clone(item.rendered);
+      this.modifiedItems[item.rendered.id] = gh.typeReset(gh.trimString(_.clone(item.rendered)), item.type);
       if (item.rendered.kmat === '') {
         item.rendered.kmat = item.original.kmat;
       } else if (item.rendered.mvm === '') {
@@ -243,7 +242,7 @@ export default class MaterialUpdate extends Vue {
     });
     this.modifiedItems = {};
     setTimeout(() => {
-      generalHelper.renderedToOriginalDiffOut(this.itemsMaterialFiltered);
+      gh.renderedToOriginalDiffOut(this.itemsMaterialFiltered);
     }, 1000);
   }
 
@@ -285,7 +284,7 @@ export default class MaterialUpdate extends Vue {
   }
 
   get currentSubpageTitle(): String {
-    return generalHelper.pickDeep(this.currentPageSubpage, ['content', 'title'], '');
+    return gh.pickDeep(this.currentPageSubpage, ['content', 'title'], '');
   }
 
   get limitInfo(): String {
@@ -352,7 +351,7 @@ export default class MaterialUpdate extends Vue {
     httpService.getDirect(this.generateUrl).then((response) => {
     // httpMockService.getMockJournalDelay().then((response) => {
       this.messageBoxShow('success');
-      this.itemsMaterialFiltered = generalHelper.renderedOriginal(response.data.materials);
+      this.itemsMaterialFiltered = gh.renderedOriginal(response.data.materials);
     }, (error) => {
       this.messageBoxShow('error');
       console.log('error ', error);
