@@ -61,25 +61,25 @@
           @mouseenter="itemOver=index" @mouseleave="itemOver=null" class="input-item">
             <td>
               <span v-if="itemOver === index">
-                 <input type="text" class="form-control" v-model="item.rendered.kmat" @input="inputChanged(index, item)">
+                 <input type="text" class="form-control" v-model="item.rendered.kmat" @input="inputChanged(index, item)" @change="inputLeft(index, item)">
               </span>
               <span v-if="itemOver !== index">{{item.rendered.kmat}}</span>
             </td>
             <td>
               <span v-if="itemOver === index">
-                 <input type="text" class="form-control" v-model="item.rendered.mvm" @input="inputChanged(index, item)">
+                 <input type="text" class="form-control" v-model="item.rendered.mvm" @input="inputChanged(index, item)" @change="inputLeft(index, item)">
               </span>
               <span v-if="itemOver !== index">{{item.rendered.mvm}}</span>
             </td>
             <td>
               <span v-if="itemOver === index">
-                 <input type="text" class="form-control" v-model="item.rendered.mnozstvi" @input="inputChanged(index, item)">
+                 <input type="text" class="form-control" v-model="item.rendered.mnozstvi" @input="inputChanged(index, item)" @change="inputLeft(index, item)">
               </span>
               <span v-if="itemOver !== index">{{item.rendered.mnozstvi}}</span>
             </td>
             <td>
               <span v-if="itemOver === index">
-                 <input type="text" class="form-control" v-model="item.rendered.hmotnost" @input="inputChanged(index, item)">
+                 <input type="text" class="form-control" v-model="item.rendered.hmotnost" @input="inputChanged(index, item)" @change="inputLeft(index, item)">
               </span>
               <span v-if="itemOver !== index">{{item.rendered.hmotnost}}</span>
             </td>
@@ -209,20 +209,23 @@ export default class MaterialUpdate extends Vue {
     return false;
   }
 
-  inputChanged(index: any, item: any) {
+  inputLeft(index: any, item: any) {
     debugger;
+    if (item.rendered.kmat === '') {
+      item.rendered.kmat = item.original.kmat;
+    } else if (item.rendered.mvm === '') {
+      item.rendered.mvm = item.original.mvm;
+    } else if (item.rendered.mnozstvi === '') {
+      item.rendered.mnozstvi = item.original.mnozstvi;
+    } else if (item.rendered.hmotnost === '') {
+      item.rendered.hmotnost = item.original.hmotnost;
+    }
+  }
+
+  inputChanged(index: any, item: any) {
     if (item && !_.isEqual(item.rendered, item.original)) {
       item['diff'] = 'modified';
       this.modifiedItems[item.rendered.id] = gh.typeReset(gh.trimString(_.clone(item.rendered)), item.type);
-      if (item.rendered.kmat === '') {
-        item.rendered.kmat = item.original.kmat;
-      } else if (item.rendered.mvm === '') {
-        item.rendered.mvm = item.original.mvm;
-      } else if (item.rendered.mnozstvi === '') {
-        item.rendered.mnozstvi = item.original.mnozstvi;
-      } else if (item.rendered.hmotnost === '') {
-        item.rendered.hmotnost = item.original.hmotnost;
-      }
       item.rendered.kmat = item.rendered.kmat.trim();
       item.rendered.mvm = item.rendered.mvm.trim();
       item.rendered.mnozstvi = item.rendered.mnozstvi.trim();

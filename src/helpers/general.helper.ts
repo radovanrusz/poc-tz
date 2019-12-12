@@ -133,7 +133,6 @@ export class GeneralHelper {
   }
 
   typeReset(itemObjR: any, itemObjT: any): any {
-    debugger;
     Object.keys(itemObjT).forEach((key, index) => {
       if (itemObjT[key] === 'string') {
         itemObjR[key] = String(itemObjR[key]);
