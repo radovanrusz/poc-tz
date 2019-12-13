@@ -75,6 +75,10 @@ export class GeneralHelper {
           read: this.pickDeep(allowedItems[item.id], ['read'], false),
           write: this.pickDeep(allowedItems[item.id], ['write'], false)
         };
+      } else {
+        _.remove(currentPageSubpages, {
+          id: item.id
+        });
       }
     });
     return currentPageSubpages;
