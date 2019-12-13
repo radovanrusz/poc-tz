@@ -211,14 +211,17 @@ export default class MaterialUpdate extends Vue {
 
   inputLeft(index: any, item: any) {
     debugger;
-    if (item.rendered.kmat === '') {
-      item.rendered.kmat = item.original.kmat;
-    } else if (item.rendered.mvm === '') {
-      item.rendered.mvm = item.original.mvm;
-    } else if (item.rendered.mnozstvi === '') {
-      item.rendered.mnozstvi = item.original.mnozstvi;
-    } else if (item.rendered.hmotnost === '') {
-      item.rendered.hmotnost = item.original.hmotnost;
+    if (item.rendered.kmat === '' || item.rendered.mvm === '' || item.rendered.mnozstvi === '' || item.rendered.hmotnost === '') {
+      if (item.rendered.kmat === '') {
+        item.rendered.kmat = item.original.kmat;
+      } else if (item.rendered.mvm === '') {
+        item.rendered.mvm = item.original.mvm;
+      } else if (item.rendered.mnozstvi === '') {
+        item.rendered.mnozstvi = item.original.mnozstvi;
+      } else if (item.rendered.hmotnost === '') {
+        item.rendered.hmotnost = item.original.hmotnost;
+      }
+      this.modifiedItems[item.rendered.id] = gh.typeReset(gh.trimString(_.clone(item.rendered)), item.type);
     }
   }
 
