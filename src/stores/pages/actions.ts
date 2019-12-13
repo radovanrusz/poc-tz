@@ -27,36 +27,74 @@ const actions: ActionTree<PagesStore, RootState> = {
       });
     })
   },
-  userPagesData({ commit, state }: ActionContext<PagesStore, RootState>, { role }: { role: string|string[] }) {
+  userPagesData({ commit, state }: ActionContext<PagesStore, RootState>, { role }: { role: string[] }) {
     debugger;
-    let roleUser = '';
-    if (typeof role === 'string') {
-      roleUser = role;
-    } else if (Array.isArray(role)) {
-      roleUser = role[0];
-    }
-    const allPages: Page[] = state.allPages;
-    let userPages: any[] = [];
-    let currentPage: any = {};
-    let currentSubpage: any = {};
-    for (let i = 0; i < allPages.length; i++) {
-      if (allPages[i] && allPages[i].allowed) {
+
+
+    // let roleUser = '';
+    // if (typeof role === 'string') {
+    //   roleUser = role;
+    // } else if (Array.isArray(role)) {
+    //   roleUser = role[0];
+    // }
+    // const allPages: Page[] = state.allPages;
+    // let userPages: any[] = [];
+    // let currentPage: any = {};
+    // let currentSubpage: any = {};
+    // for (let i = 0; i < allPages.length; i++) {
+    //   if (allPages[i] && allPages[i].allowed) {
+    //     debugger;
+    //     const current: any = generalHelper.processRole(roleUser, allPages[i]);
+    //     if (current && current.allowed && (current.allowed.read || current.allowed.write)) {
+    //       userPages.push(current);
+    //     }
+    //   }
+    // }
+    // debugger;
+    // if (userPages && userPages.length > 0) {
+    //   // userPages.sort((a, b) => (a.id < b.id ? -1 : 1));
+    //   currentPage = userPages[DEFAULT_CURRENTPAGE_INDEX];
+    //   if (currentPage && currentPage.subpages && currentPage.subpages.length > 0) {
+    //     currentPage.currentSubpage = currentPage.subpages[DEFAULT_CURRENTSUBPAGE_INDEX];
+    //   }
+    // }
+    // debugger;
+    // commit('storePagesData', { allPages, userPages, currentPage });
+
+
+
+    // return new Promise((resolve, reject) => {
+      debugger;
+      // httpMockService.getMockDataAllowedRoles().then((response: any) => {
+      let response = httpMockService.getMockDataAllowedRoles();
         debugger;
-        const current: any = generalHelper.processRole(roleUser, allPages[i]);
-        if (current && current.allowed && (current.allowed.read || current.allowed.write)) {
-          userPages.push(current);
+        const res: any = response.allowed_content; // server response
+        const allPages: Page[] = state.allPages;
+        let userPages: any[] = [];
+        let currentPage: any = {};
+        // let currentSubpage: any = {};
+        for (let i = 0; i < allPages.length; i++) {
+          let current1: any = allPages[i];
+          const current: any = generalHelper.processAllowedContent(allPages[i], res);
+          if (current) {
+            userPages.push(current);
+          }
         }
-      }
-    }
-    debugger;
-    if (userPages && userPages.length > 0) {
-      // userPages.sort((a, b) => (a.id < b.id ? -1 : 1));
-      currentPage = userPages[DEFAULT_CURRENTPAGE_INDEX];
-      if (currentPage && currentPage.subpages && currentPage.subpages.length > 0) {
-        currentPage.currentSubpage = currentPage.subpages[DEFAULT_CURRENTSUBPAGE_INDEX];
-      }
-    }
-    commit('storePagesData', { allPages, userPages, currentPage });
+        if (userPages && userPages.length > 0) {
+        // userPages.sort((a, b) => (a.id < b.id ? -1 : 1));
+          currentPage = userPages[DEFAULT_CURRENTPAGE_INDEX];
+          if (currentPage && currentPage.subpages && currentPage.subpages.length > 0) {
+            currentPage.currentSubpage = currentPage.subpages[DEFAULT_CURRENTSUBPAGE_INDEX];
+            currentPage.allowed = { read: true, write: true };
+          }
+        }
+        debugger;
+        commit('storePagesData', { allPages, userPages, currentPage });
+        // resolve(res);
+      // }, (error: any) => {
+      //   console.log('error ', error);
+      // });
+    // });
   },
   destroyUserPagesData({ commit }: ActionContext<PagesStore, RootState>) {
     debugger;

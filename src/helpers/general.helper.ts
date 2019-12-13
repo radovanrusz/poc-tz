@@ -48,6 +48,25 @@ export class GeneralHelper {
     return res;
   }
 
+  processAllowedContent(pageOriginal: any, allowedItems: any): Object {
+    let res;
+    if (pageOriginal && pageOriginal.id && allowedItems[pageOriginal.id]) {
+      res = {
+        id: pageOriginal.id,
+        name: pageOriginal.name,
+        allowed: {
+          read: false,
+          write: false
+        },
+        subpages: pageOriginal.subpages,
+        currentSubpage: pageOriginal.currentSubpage
+      };
+    } else {
+      res = {};
+    }
+    return res;
+  }
+
   getPermissions(currentPage: any): Object {
     const { read, write } = currentPage.allowed;
     return { read, write };
