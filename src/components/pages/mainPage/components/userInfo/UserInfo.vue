@@ -5,7 +5,7 @@
       <p class="card-text text-left">
         Name: {{ userName }}
         <br/>Email: {{ userEmail }}
-        <br/>Role: {{ userRole }}
+        <br/>Role: {{ userRoles }}
       </p>
       <a href="#" class="btn btn-primary" @click="userLogout">Logout</a>
       <hr class="mt-5 mb-3">
@@ -51,7 +51,7 @@ const generalHelper = new GeneralHelper();
     },
     userRole: {
       required: false,
-      type: String
+      type: Array
     },
     msg: {
       required: false,
@@ -70,7 +70,7 @@ export default class UserInfo extends Vue {
 
   userEmail!: string;
 
-  userRole!: string;
+  userRole!: string[];
 
   @PagesStore.Getter currentPage!: Page;
 
@@ -84,6 +84,10 @@ export default class UserInfo extends Vue {
 
   get currentPageWrite(): Boolean {
     return generalHelper.pickDeep(this.currentPage, ['allowed', 'write'], false);
+  }
+
+  get userRoles(): String {
+    return this.userRole.join(', ');
   }
 }
 </script>
