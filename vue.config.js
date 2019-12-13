@@ -3,7 +3,7 @@ module.exports = {
   // https://webpack.js.org/configuration/dev-server/#devserver-disablehostcheck
   devServer: {
     // host: '0.0.0.0',
-    // host: 'localhost',
+    host: 'localhost',
     // port: 8080,
     disableHostCheck: true,
     headers: {
