@@ -23,7 +23,7 @@ const actions: ActionTree<UserStore, RootState> = {
         debugger;
         const res: any = response.data; // server response
         if (res && res.statusCase && res.statusCase === 'ok') {
-          commit('loginUser', { id: res.id, name: res.name, email: res.email, role: res.role[0] });
+          commit('loginUser', { id: res.id, name: res.name, email: res.email, role: res.role[0], accessToken: res.token });
           resolve(res);
         } else {
           resolve(false);

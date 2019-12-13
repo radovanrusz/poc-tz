@@ -9,6 +9,10 @@ const getters: GetterTree<UserStore, RootState> = {
   userData(state: UserStore): UserData {
     debugger;
     return state.userData;
+  },
+  accessToken(state: UserStore): String {
+    debugger;
+    return state.accessToken;
   }
 };
 

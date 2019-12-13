@@ -10,7 +10,8 @@ const namespaced = true;
 
 const state: UserStore = {
   userData: USER_DATA_INITIAL,
-  userStatus: USER_STATUS_INITIAL
+  userStatus: USER_STATUS_INITIAL,
+  accessToken: ''
 };
 
 const user: Module<UserStore, RootState> = {

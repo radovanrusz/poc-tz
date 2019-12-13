@@ -6,14 +6,16 @@ const mutations: MutationTree<UserStore> = {
   loginUser(state: UserStore, data: UserData) {
     const newState = {
       userData: data,
-      userStatus: USER_STATUS_IN
+      userStatus: USER_STATUS_IN,
+      accessToken: data.accessToken
     };
     Object.assign(state, newState);
   },
   logoutUser(state: UserStore) {
     const newState = {
       userData: USER_DATA_INITIAL,
-      userStatus: USER_STATUS_OUT
+      userStatus: USER_STATUS_OUT,
+      accessToken: ''
     };
     Object.assign(state, newState);
   }

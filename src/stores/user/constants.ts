@@ -4,7 +4,8 @@ export const USER_DATA_INITIAL: UserData = {
   id: '',
   name: '',
   email: '',
-  role: ''
+  role: '',
+  accessToken: ''
 };
 
 export const USER_STATUS_IN: UserStatus = 'loggedIn';
