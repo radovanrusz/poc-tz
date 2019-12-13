@@ -2,10 +2,6 @@
     {
         "id": "pwhjj",
         "name": "Prohlizeni WHJ Journalu",
-        "allowed": {
-            "read": ["manager", "worker", "coworker"],
-            "write": ["manager"]
-        },
         "subpages": [
             {
                 "id": "pwhjj-home",
@@ -53,10 +49,6 @@
     {
         "id": "rm",
         "name": "Registrace materialu",
-        "allowed": {
-            "read": ["manager", "worker"],
-            "write": ["manager", "worker"]
-        },
         "subpages": [
             {
                 "id": "rm-home",
@@ -80,10 +72,6 @@
     {
         "id": "sm",
         "name": "Stavajici material",
-        "allowed": {
-            "read": ["manager", "worker", "coworker"],
-            "write": ["manager", "worker"]
-        },
         "subpages": [
             {
                 "id": "sm-home",
@@ -107,10 +95,6 @@
     {
         "id": "pm",
         "name": "Presun materialu",
-        "allowed": {
-            "read": ["manager", "worker", "coworker"],
-            "write": ["manager", "worker"]
-        },
         "subpages": [
             {
                 "id": "pm-home",

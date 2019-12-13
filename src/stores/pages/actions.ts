@@ -63,10 +63,10 @@ const actions: ActionTree<PagesStore, RootState> = {
 
 
 
-    // return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       debugger;
-      // httpMockService.getMockDataAllowedRoles().then((response: any) => {
-      let response = httpMockService.getMockDataAllowedRoles();
+      httpMockService.getMockDataAllowedRolesDelay().then((response: any) => {
+      // let response = httpMockService.getMockDataAllowedRoles();
         debugger;
         const res: any = response.allowed_content; // server response
         const allPages: Page[] = state.allPages;
@@ -90,11 +90,11 @@ const actions: ActionTree<PagesStore, RootState> = {
         }
         debugger;
         commit('storePagesData', { allPages, userPages, currentPage });
-        // resolve(res);
-      // }, (error: any) => {
-      //   console.log('error ', error);
-      // });
-    // });
+        resolve(res);
+      }, (error: any) => {
+        console.log('error ', error);
+      });
+    });
   },
   destroyUserPagesData({ commit }: ActionContext<PagesStore, RootState>) {
     debugger;
