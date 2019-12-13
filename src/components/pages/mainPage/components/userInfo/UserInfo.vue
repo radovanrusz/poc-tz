@@ -79,11 +79,11 @@ export default class UserInfo extends Vue {
   }
 
   get currentPageRead(): Boolean {
-    return generalHelper.pickDeep(this.currentPage, ['allowed', 'read'], false);
+    return generalHelper.pickDeep(this.currentPage, ['currentSubpage', 'allowed', 'read'], false);
   }
 
   get currentPageWrite(): Boolean {
-    return generalHelper.pickDeep(this.currentPage, ['allowed', 'write'], false);
+    return generalHelper.pickDeep(this.currentPage, ['currentSubpage', 'allowed', 'write'], false);
   }
 
   get userRoles(): String {

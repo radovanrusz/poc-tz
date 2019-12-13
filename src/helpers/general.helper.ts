@@ -49,16 +49,17 @@ export class GeneralHelper {
   }
 
   processAllowedContent(pageOriginal: any, allowedItems: any): Object {
+    debugger;
     let res;
     if (pageOriginal && pageOriginal.id && allowedItems[pageOriginal.id]) {
       res = {
         id: pageOriginal.id,
         name: pageOriginal.name,
-        allowed: {
-          read: this.pickDeep(allowedItems[pageOriginal.id], ['read'], false),
-          write: this.pickDeep(allowedItems[pageOriginal.id], ['write'], false)
-        },
-        subpages: pageOriginal.subpages,
+        // allowed: {
+        //   read: this.pickDeep(allowedItems[pageOriginal.id], ['read'], false),
+        //   write: this.pickDeep(allowedItems[pageOriginal.id], ['write'], false)
+        // },
+        subpages: this.getPermissions(pageOriginal.subpages, allowedItems),
         currentSubpage: pageOriginal.currentSubpage
       };
     } else {
@@ -67,9 +68,16 @@ export class GeneralHelper {
     return res;
   }
 
-  getPermissions(currentPage: any): Object {
-    const { read, write } = currentPage.allowed;
-    return { read, write };
+  getPermissions(currentPageSubpages: any, allowedItems: any): Object {
+    currentPageSubpages.forEach((item: any) => {
+      if (item && item.id && allowedItems[item.id]) {
+        item.allowed = {
+          read: this.pickDeep(allowedItems[item.id], ['read'], false),
+          write: this.pickDeep(allowedItems[item.id], ['write'], false)
+        };
+      }
+    });
+    return currentPageSubpages;
   }
 
   /**

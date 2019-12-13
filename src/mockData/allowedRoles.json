@@ -1,19 +1,19 @@
 {
 	"roles": [ "admin", "worker", "coworker" ],
 	"allowed_content": {
-		"pwhjj": { "read": true, "write": false },
-		"pwhjj-home": { "read": true, "write": false },
+        "pwhjj": {},
+        "pwhjj-home": { "read": true, "write": false },
         "pwhjj-personalAdministration": { "read": true, "write": true },
         "pwhjj-agendaAdministration": { "read": true, "write": true },
         "pwhjj-userAdministration": { "read": true, "write": true },
         "pwhjj-roleAdministration": { "read": true, "write": true },
-        "rm": { "read": true, "write": false },
+        "rm": {},
 		"rm-home": { "read": true, "write": false },
         "rm-personalAdministration": { "read": true, "write": true },
-        "sm": { "read": true, "write": true },
+        "sm": {},
         "sm-home": { "read": true, "write": true },
         "sm-personalAdministration": { "read": true, "write": true },
-        "pm": { "read": true, "write": true },
+        "pm": {},
         "pm-home": { "read": true, "write": true },
         "pm-personalAdministration": { "read": true, "write": true }
     }

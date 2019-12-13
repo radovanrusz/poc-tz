@@ -9,12 +9,13 @@ export type Subpage = {
     id: string;
     name: string;
     content: any;
+    allowed: any;
 };
 
 export type Page = {
     id: string;
     name: string;
-    allowed: any;
+    allowed?: any;
     subpages: Subpage[];
     currentSubpage: Subpage|any;
 };
