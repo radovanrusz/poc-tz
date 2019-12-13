@@ -55,8 +55,8 @@ export class GeneralHelper {
         id: pageOriginal.id,
         name: pageOriginal.name,
         allowed: {
-          read: false,
-          write: false
+          read: this.pickDeep(allowedItems[pageOriginal.id], ['read'], false),
+          write: this.pickDeep(allowedItems[pageOriginal.id], ['write'], false)
         },
         subpages: pageOriginal.subpages,
         currentSubpage: pageOriginal.currentSubpage

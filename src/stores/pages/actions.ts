@@ -85,7 +85,6 @@ const actions: ActionTree<PagesStore, RootState> = {
           currentPage = userPages[DEFAULT_CURRENTPAGE_INDEX];
           if (currentPage && currentPage.subpages && currentPage.subpages.length > 0) {
             currentPage.currentSubpage = currentPage.subpages[DEFAULT_CURRENTSUBPAGE_INDEX];
-            currentPage.allowed = { read: true, write: true };
           }
         }
         debugger;
