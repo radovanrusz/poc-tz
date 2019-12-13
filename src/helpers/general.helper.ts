@@ -48,7 +48,7 @@ export class GeneralHelper {
     return res;
   }
 
-  processAllowedContent(pageOriginal: any, allowedItems: any): Object {
+  processAllowedContent(pageOriginal: any, allowedItems: any): Object|undefined {
     debugger;
     let res;
     if (pageOriginal && pageOriginal.id && allowedItems[pageOriginal.id]) {
@@ -63,7 +63,7 @@ export class GeneralHelper {
         currentSubpage: pageOriginal.currentSubpage
       };
     } else {
-      res = {};
+      res = undefined;
     }
     return res;
   }

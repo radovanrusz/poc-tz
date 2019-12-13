@@ -72,9 +72,7 @@ const actions: ActionTree<PagesStore, RootState> = {
         const allPages: Page[] = state.allPages;
         let userPages: any[] = [];
         let currentPage: any = {};
-        // let currentSubpage: any = {};
         for (let i = 0; i < allPages.length; i++) {
-          let current1: any = allPages[i];
           const current: any = generalHelper.processAllowedContent(allPages[i], res);
           if (current) {
             userPages.push(current);
