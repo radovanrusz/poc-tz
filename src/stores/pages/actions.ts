@@ -92,6 +92,7 @@ const actions: ActionTree<PagesStore, RootState> = {
         resolve(res);
       }, (error: any) => {
         console.log('error ', error);
+        reject(error);
       });
     });
   },

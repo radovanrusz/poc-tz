@@ -11,7 +11,7 @@
 		"rm-home": { "read": true, "write": false },
         "rm-personalAdministration": { "read": true, "write": true },
         "sm": {},
-        "sm-home": { "read": true, "write": true },
+        "sm-home": { "read": true, "write": false },
         "sm-personalAdministration": { "read": true, "write": true },
         "pm": {},
         "pm-home": { "read": true, "write": true },

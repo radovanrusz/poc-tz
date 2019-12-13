@@ -63,10 +63,10 @@ export default class LoginPage extends Vue {
         debugger;
         if (response) {
           const { role }: any = response;
-          this.userPagesData({ role });
-        } else {
-          (this.$refs.loginForm as HTMLFormElement).showAlertBannerAndReset();
+          return this.userPagesData({ role });
         }
+        (this.$refs.loginForm as HTMLFormElement).showAlertBannerAndReset();
+        return false;
       }).catch((error) => {
         console.log('loginHandle error ', error);
       }).finally(() => {
