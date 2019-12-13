@@ -4,8 +4,9 @@ import { USER_DATA_INITIAL, USER_STATUS_OUT, USER_STATUS_IN } from './constants'
 
 const mutations: MutationTree<UserStore> = {
   loginUser(state: UserStore, data: UserData) {
+    const { id, name, email, role } = data;
     const newState = {
-      userData: data,
+      userData: { id, name, email, role },
       userStatus: USER_STATUS_IN,
       accessToken: data.accessToken
     };

@@ -23,7 +23,8 @@ module.exports = {
     'comma-dangle': ['error', 'never'],
     'no-underscore-dangle': ['error', { allow: ['_id'] }],
     'dot-notation': 'off',
-    'no-param-reassign': 'off'
+    'no-param-reassign': 'off',
+    'object-curly-newline': 'off'
   },
   parserOptions: {
     parser: 'typescript-eslint-parser'

@@ -3,7 +3,7 @@ export interface UserData {
     name: string;
     email: string;
     role: string;
-    accessToken: string;
+    accessToken?: string;
 }
 
 export type UserStatus = 'initial'|'loggedIn'|'loggedOut';
