@@ -1,6 +1,6 @@
 <template>
   <div class="sub-page shadow rounded text-left" :id="idComponent">
-    <div :id="`${currentPageId}-${currentSubpageId}`">
+    <div :id="`${currentSubpageId}`">
       <div v-if="currentPageId === 'pwhjj' && currentSubpageJournalFilterTable">
         <journal-review :title="currentSubpageTitle" :text="currentSubpageText"/>
       </div>
