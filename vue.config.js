@@ -4,7 +4,7 @@ module.exports = {
   devServer: {
     // host: '0.0.0.0',
     host: 'localhost',
-    // port: 8080,
+    port: 8080,
     disableHostCheck: true,
     headers: {
       'Access-Control-Allow-Origin': '*',

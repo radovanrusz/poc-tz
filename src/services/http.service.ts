@@ -17,6 +17,10 @@ export class HttpMockService {
     return require('../mockData/materialMvm1Mock.json');
   }
 
+  getMockDataAllowedRoles() {
+    return require('../mockData/allowedRoles.json');
+  }
+
   getMockDataAllowedCredentialsDelay = () => {
     const mockData = this.getMockDataAllowedCredentials();
     return new Promise((resolve) => {
@@ -83,6 +87,15 @@ export class HttpMockService {
 
   getMockDataMaterialMvm1Delay = () => {
     const mockData = this.getMockDataMaterialMvm1();
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(mockData);
+      }, 2000);
+    });
+  }
+
+  getMockDataAllowedRolesDelay = () => {
+    const mockData = this.getMockDataAllowedRoles();
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(mockData);
