@@ -8,7 +8,7 @@
         },
         "subpages": [
             {
-                "id": "home",
+                "id": "pwhjj-home",
                 "name": "Domu Journal",
                 "content": {
                     "title": "Prohlizeni WHJ Journalu domovska stranka",
@@ -16,7 +16,7 @@
                 }
             },
             {
-                "id": "personalAdministration",
+                "id": "pwhjj-personalAdministration",
                 "name": "Osobni administrace Journal",
                 "content": {
                     "title": "Prohlizeni WHJ Journalu osobni administrace",
@@ -25,7 +25,7 @@
                 }
             },
             {
-                "id": "agendaAdministration",
+                "id": "pwhjj-agendaAdministration",
                 "name": "Administrace agend",
                 "content": {
                     "title": "Prohlizeni WHJ Journalu agenda administrace",
@@ -33,7 +33,7 @@
                 }
             },
             {
-                "id": "userAdministration",
+                "id": "pwhjj-userAdministration",
                 "name": "Administrace uzivatelov",
                 "content": {
                     "title": "Prohlizeni WHJ Journalu user administrace",
@@ -41,7 +41,7 @@
                 }
             },
             {
-                "id": "roleAdministration",
+                "id": "pwhjj-roleAdministration",
                 "name": "Administrace roli",
                 "content": {
                     "title": "Prohlizeni WHJ Journalu role administrace",
@@ -59,7 +59,7 @@
         },
         "subpages": [
             {
-                "id": "home",
+                "id": "rm-home",
                 "name": "Domu registrace materialu",
                 "content": {
                     "title": "Registrace materialu domovska stranka",
@@ -67,7 +67,7 @@
                 }
             },
             {
-                "id": "personalAdministration",
+                "id": "rm-personalAdministration",
                 "name": "Osobni administrace registrace materialu",
                 "content": {
                     "title": "registrace materialu osobni administrace",
@@ -86,7 +86,7 @@
         },
         "subpages": [
             {
-                "id": "home",
+                "id": "sm-home",
                 "name": "Domu stavajici material",
                 "content": {
                     "title": "Stavajici material home",
@@ -94,7 +94,7 @@
                 }
             },
             {
-                "id": "personalAdministration",
+                "id": "sm-personalAdministration",
                 "name": "Osobni administrace stavajici material",
                 "content": {
                     "title": "Stavajici material administrace",
@@ -113,7 +113,7 @@
         },
         "subpages": [
             {
-                "id": "home",
+                "id": "pm-home",
                 "name": "Domu presun materialu",
                 "content": {
                     "title": "Presun material home",
@@ -121,7 +121,7 @@
                 }
             },
             {
-                "id": "personalAdministration",
+                "id": "pm-personalAdministration",
                 "name": "Osobni administrace presun materialu",
                 "content": {
                     "title": "Presun materialu administrace",
