@@ -57,9 +57,7 @@ export default class LoginPage extends Vue {
 
   loginHandle(userAuth: {name: string, password: string}) {
     console.log('login clicked');
-    let status = MODE_LOADING;
-    const reference = REFERENCE_INITIAL;
-    this.setMode({ reference, status });
+    this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
     this.loginUser({ name: userAuth.name, password: userAuth.password })
       .then((response) => {
         debugger;
@@ -72,8 +70,7 @@ export default class LoginPage extends Vue {
       }).catch((error) => {
         console.log('loginHandle error ', error);
       }).finally(() => {
-        status = MODE_LOADED;
-        this.setMode({ reference, status });
+        this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADED });
       });
   }
 }
