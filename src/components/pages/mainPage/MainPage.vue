@@ -89,6 +89,7 @@ export default class MainPage extends Vue {
   }
 
   get userProfile() {
+    console.log('ok userProfile');
     const { name, email, role } = this.userData;
     return { name, email, role };
   }
