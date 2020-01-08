@@ -56,7 +56,7 @@ export default class LoginPage extends Vue {
     ({ reference, status }: { reference: Reference, status: AppMode }) => void;
 
   loginHandle(userAuth: {name: string, password: string}) {
-    console.log('login clicked');
+    // console.log('login clicked');
     if (userAuth && userAuth.name && userAuth.name.trim() && userAuth.password) {
       this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
       this.loginUser({ name: userAuth.name.trim(), password: userAuth.password })
