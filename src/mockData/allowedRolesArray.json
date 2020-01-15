@@ -1,0 +1,18 @@
+
+[
+    { "content_id": "pwhjj" },
+    { "content_id": "pwhjj-home", "read": true, "write": false },
+    { "content_id": "pwhjj-personalAdministration", "read": true, "write": true },
+    { "content_id": "pwhjj-agendaAdministration", "read": true, "write": true },
+    { "content_id": "pwhjj-userAdministration", "read": true, "write": true },
+    { "content_id": "pwhjj-roleAdministration", "read": true, "write": true },
+    { "content_id": "rm" },
+    { "content_id": "rm-home", "read": true, "write": false },
+    { "content_id": "rm-personalAdministration", "read": true, "write": true },
+    { "content_id": "sm" },
+    { "content_id": "sm-home", "read": true, "write": false },
+    { "content_id": "sm-personalAdministration", "read": true, "write": true },
+    { "content_id": "pm" },
+    { "content_id": "pm-home", "read": true, "write": true },
+    { "content_id": "pm-personalAdministration", "read": true, "write": true }
+]

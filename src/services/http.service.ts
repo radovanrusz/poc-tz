@@ -21,6 +21,10 @@ export class HttpMockService {
     return require('../mockData/allowedRoles.json');
   }
 
+  getMockDataAllowedRolesArray() {
+    return require('../mockData/allowedRolesArray.json');
+  }
+
   getMockDataAllowedCredentialsDelay = () => {
     const mockData = this.getMockDataAllowedCredentials();
     return new Promise((resolve) => {
@@ -100,6 +104,15 @@ export class HttpMockService {
       }, 2000);
     });
   }
+
+  getMockDataAllowedRolesArrayDelay = () => {
+    const mockData = this.getMockDataAllowedRolesArray();
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(mockData);
+      }, 2000);
+    });
+  }
 }
 export class HttpService {
   //   serverURL = 'https://domain.com/api/orders';
@@ -133,8 +146,9 @@ export class HttpService {
     return Vue.axios.post(`${this.formedURL}${endpoint}`, body);
   }
 
-  public getDirect(url: string, headers: any = {}): Promise<any> {
-    return Vue.axios.get(url);
+  public getDirect(url: string, params: any = {}, headers: any = {}, body: any = {}): Promise<any> {
+    debugger;
+    return Vue.axios.get(url, { params });
   }
 
   public putDirect(url: string, obj: any, headers: any = {}): Promise<any> {

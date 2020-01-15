@@ -9,6 +9,7 @@ const httpMockService = new HttpMockService();
 const generalHelper = new GeneralHelper();
 const DEFAULT_CURRENTPAGE_INDEX = 0;
 const DEFAULT_CURRENTSUBPAGE_INDEX = 0;
+const cocoUrl = process.env.VUE_APP_COCO_URL;
 
 const actions: ActionTree<PagesStore, RootState> = {
   storePagesData({ commit }: ActionContext<PagesStore, RootState>) {
@@ -26,14 +27,22 @@ const actions: ActionTree<PagesStore, RootState> = {
   },
   userPagesData({ commit, state }: ActionContext<PagesStore, RootState>, { role }: { role: string[] }) {
     return new Promise((resolve, reject) => {
-      httpMockService.getMockDataAllowedRolesDelay().then((response: any) => {
+      // httpMockService.getMockDataAllowedRolesDelay().then((response: any) => {
+      httpMockService.getMockDataAllowedRolesArrayDelay().then((response: any) => {
       // let response = httpMockService.getMockDataAllowedRoles();
-        const res: any = response.allowed_content; // server response
+      // const params = { roles: ['admin'] };
+      // const queryString = 'roles=admin,worker,coworker';
+        debugger;
+        // httpService.getDirect(`${cocoUrl}?${queryString}`).then((response: any) => {
+        debugger;
+        // const res: any = response.allowed_content; // server response
+        const res: any = response; // server response
         const { allPages }: Page[]|any = state;
         const userPages: any[] = [];
         let currentPage: any = {};
         for (let i = 0; i < allPages.length; i++) {
-          const current: any = generalHelper.processAllowedContent(allPages[i], res);
+          // const current: any = generalHelper.processAllowedContent(allPages[i], res);
+          const current: any = generalHelper.processAllowedCOC(allPages[i], res);
           if (current) {
             userPages.push(current);
           }

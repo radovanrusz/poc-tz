@@ -83,6 +83,51 @@ export class GeneralHelper {
     return currentPageSubpages;
   }
 
+  // small idea refactor COC
+
+  processAllowedCOC(pageOriginal: any, allowedItems: any): Object|undefined {
+    debugger;
+    let res;
+    if (pageOriginal && pageOriginal.id && this.isContentIdContained(pageOriginal.id, allowedItems).allowed) {
+      res = {
+        id: pageOriginal.id,
+        name: pageOriginal.name,
+        subpages: this.getPermissionsCOC(pageOriginal.subpages, allowedItems),
+        currentSubpage: pageOriginal.currentSubpage
+      };
+    } else {
+      res = undefined;
+    }
+    return res;
+  }
+
+  getPermissionsCOC(currentPageSubpages: any, allowedItems: any): Object {
+    debugger;
+    currentPageSubpages.forEach((item: any) => {
+      const isContained = this.isContentIdContained(item.id, allowedItems);
+      if (item && item.id && isContained.allowed) {
+        item.allowed = {
+          read: this.pickDeep(allowedItems[isContained.index], ['read'], false),
+          write: this.pickDeep(allowedItems[isContained.index], ['write'], false)
+        };
+      } else {
+        _.remove(currentPageSubpages, {
+          id: item.id
+        });
+      }
+    });
+    return currentPageSubpages;
+  }
+
+  isContentIdContained(id: any, allowedItemsArr: any[]): { allowed: boolean, index: number } {
+    for (let i = 0; i < allowedItemsArr.length; i++) {
+      if (allowedItemsArr[i].content_id === id) {
+        return { allowed: true, index: i };
+      }
+    }
+    return { allowed: false, index: 0 };
+  }
+
   /**
   * It returns deep object look ups
   * @param {object} obj to start with
