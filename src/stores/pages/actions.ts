@@ -28,15 +28,17 @@ const actions: ActionTree<PagesStore, RootState> = {
   userPagesData({ commit, state }: ActionContext<PagesStore, RootState>, { role }: { role: string[] }) {
     return new Promise((resolve, reject) => {
       // httpMockService.getMockDataAllowedRolesDelay().then((response: any) => {
-      httpMockService.getMockDataAllowedRolesArrayDelay().then((response: any) => {
+      // httpMockService.getMockDataAllowedRolesArrayDelay().then((response: any) => { // this worked fakeBE ok
       // let response = httpMockService.getMockDataAllowedRoles();
       // const params = { roles: ['admin'] };
-      // const queryString = 'roles=admin,worker,coworker';
-        debugger;
-        // httpService.getDirect(`${cocoUrl}?${queryString}`).then((response: any) => {
+      const rolesArrStr = role.join(',');
+      const queryString = `roles=${rolesArrStr}`;
+      debugger;
+      httpService.getDirect(`${cocoUrl}?${queryString}`).then((response: any) => {
         debugger;
         // const res: any = response.allowed_content; // server response
-        const res: any = response; // server response
+        // const res: any = response; // server response
+        const res: any = response.data; // COCO server response
         const { allPages }: Page[]|any = state;
         const userPages: any[] = [];
         let currentPage: any = {};
