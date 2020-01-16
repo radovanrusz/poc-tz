@@ -158,9 +158,9 @@ export default class MaterialRegistration extends Vue {
     if (this.checkInputs()) {
       const dataObj = {
         hmotnost: Number(this.regHmotnost.value),
-        kmat: String(this.regKmat.value),
+        kmat: String(this.regKmat.value).trim(),
         mnozstvi: Number(this.regMnozstvi.value),
-        mvm: String(this.regMvm.title)
+        mvm: String(this.regMvm.title).trim()
       };
       this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
       httpService.putDirect(material, [dataObj]).then((response) => {
