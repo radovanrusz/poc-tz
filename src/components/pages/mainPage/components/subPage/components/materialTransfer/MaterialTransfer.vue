@@ -59,7 +59,7 @@
         <tbody>
           <tr v-for="(item, index) in itemsMaterialFiltered" :key="item._id" :id="item.rendered._id" :index="index"
           @mouseleave="itemClicked=null" class="input-item"
-          @click="inputCopied(item); itemClicked=index">
+          @click="inputCopied(item, index); itemClicked=index">
             <td>
               <span>{{item.rendered.kmat}}</span>
             </td>
@@ -101,7 +101,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in copiedItems" :key="item._id" :id="item._id" :index="index"
+            <tr v-for="(item, index) in copiedItemsArr" :key="item._id" :id="item._id" :index="index"
             class="input-item">
               <td>
                 <span>
@@ -109,18 +109,21 @@
                 </span>
               </td>
               <td>
-                <span>
+                <span v-bind:class="{error: !item.mvmValid}">
                   <input type="text" class="form-control" v-model="item.mvm">
+                  <span v-if="!item.mvmValid">Required any value</span>
                 </span>
               </td>
               <td>
-                <span>
+                <span v-bind:class="{error: !item.mnozstviValid}">
                   <input type="text" class="form-control" v-model="item.mnozstvi">
+                  <span v-if="!item.mnozstviValid">Required whole number &gt; 0 and &lt;= original</span>
                 </span>
               </td>
               <td>
-                <span>
+                <span v-bind:class="{error: !item.hmotnostValid}">
                   <input type="text" class="form-control" v-model="item.hmotnost">
+                  <span v-if="!item.hmotnostValid">Required whole number &gt; 0 and &lt;= original</span>
                 </span>
               </td>
             </tr>
@@ -205,6 +208,10 @@ export default class materialTransfer extends Vue {
 
   copiedItems: any = {};
 
+  copiedItemsArr: any[] = [];
+
+  itemCopiedBackup: any = {};
+
   @PagesStore.Getter currentPageSubpage!: Subpage;
 
   @PagesStore.Getter currentPage!: Page;
@@ -268,10 +275,19 @@ export default class materialTransfer extends Vue {
   //   }
   // }
 
-  inputCopied(item: any) {
+  inputCopied(item: any, index: number) {
     debugger;
     this.copiedItems = {};
     this.copiedItems[item.rendered.id] = _.clone(item.rendered);
+    this.addValidatorProps(this.copiedItems, item.rendered.id, index);
+    this.copiedItemsArr = [..._.values(this.copiedItems)];
+  }
+
+  addValidatorProps(itemObj: any, id: any, index: number) {
+    itemObj[id]['index'] = index;
+    itemObj[id]['mvmValid'] = true;
+    itemObj[id]['mnozstviValid'] = true;
+    itemObj[id]['hmotnostValid'] = true;
   }
 
   updateChanges() {
@@ -279,18 +295,21 @@ export default class materialTransfer extends Vue {
   }
 
   updateChangesAndStore() {
-    const dataObj = _.values(this.copiedItems);
-    this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
-    httpService.putDirect(materialBaseUrl, dataObj).then((response) => {
-      this.messageBoxShow('success');
-      this.updateChanges();
-    }, (error) => {
-      this.messageBoxShow('error');
-      console.log('error ', error);
-    }).finally(() => {
-      this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADED });
-      this.messageBoxHide();
-    });
+    if (this.checkCopiedValues(this.copiedItemsArr)) {
+      console.log('updateChangesAndStore done');
+      // const dataObj = _.values(this.copiedItems);
+      // this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
+      // httpService.putDirect(materialBaseUrl, dataObj).then((response) => {
+      //   this.messageBoxShow('success');
+      //   this.updateChanges();
+      // }, (error) => {
+      //   this.messageBoxShow('error');
+      //   console.log('error ', error);
+      // }).finally(() => {
+      //   this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADED });
+      //   this.messageBoxHide();
+      // });
+    }
   }
 
   onChangeMultiselect(event: any, id: any) {
@@ -392,6 +411,43 @@ export default class materialTransfer extends Vue {
     });
   }
 
+  // itemBackupFill(item: any) {
+  //   console.log('input in');
+  //   this.itemCopiedBackup = _.clone(item);
+  //   // this.itemCopiedBackup['mvmValid'] = false;
+  // }
+
+  // itemBackupClean() {
+  //   console.log('input out');
+  //   // this.itemCopiedBackup = {};
+  // }
+
+  checkCopiedValues(cItemsArr: any[]) {
+    debugger;
+    let res = true;
+    for (let i = 0; i < cItemsArr.length; i++) {
+      if (cItemsArr[i].mvm.trim() === this.itemsMaterialFiltered[cItemsArr[i].index].rendered.mvm) {
+        cItemsArr[i].mvmValid = true;
+      } else {
+        cItemsArr[i].mvmValid = false;
+        res = false;
+      }
+      if (cItemsArr[i].mnozstvi === this.itemsMaterialFiltered[cItemsArr[i].index].rendered.mnozstvi) {
+        cItemsArr[i].mnozstviValid = true;
+      } else {
+        cItemsArr[i].mnozstviValid = false;
+        res = false;
+      }
+      if (cItemsArr[i].hmotnost === this.itemsMaterialFiltered[cItemsArr[i].index].rendered.hmotnost) {
+        cItemsArr[i].hmotnostValid = true;
+      } else {
+        cItemsArr[i].hmotnostValid = false;
+        res = false;
+      }
+    }
+    return res;
+  }
+
   messageBoxShow(type: string) {
     if (type === 'success') {
       this.message.executed = !this.message.executed;
@@ -471,6 +527,14 @@ export default class materialTransfer extends Vue {
     .title {
       font-size: 20px;
       font-weight: bold;
+    }
+  }
+  .error {
+    input {
+      border:1px solid red;
+    }
+    span {
+      color: red;
     }
   }
 }
