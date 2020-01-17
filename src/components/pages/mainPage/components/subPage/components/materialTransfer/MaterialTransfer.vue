@@ -115,15 +115,17 @@
                 </span>
               </td>
               <td>
-                <span v-bind:class="{error: !item.mnozstviValid}">
+                <span v-bind:class="{error: (!item.mnozstviValid || !item.hmotnostValidDiff)}">
                   <input type="text" class="form-control" v-model="item.mnozstvi">
                   <span v-if="!item.mnozstviValid">Required whole number &gt; 0 and &lt;= original</span>
+                  <span v-if="!item.mnozstviValidDiff">Required only one from pair "mnozstvi - hmotnost"</span>
                 </span>
               </td>
               <td>
-                <span v-bind:class="{error: !item.hmotnostValid}">
+                <span v-bind:class="{error: (!item.hmotnostValid || !item.mnozstviValidDiff)}">
                   <input type="text" class="form-control" v-model="item.hmotnost">
                   <span v-if="!item.hmotnostValid">Required whole number &gt; 0 and &lt;= original</span>
+                  <span v-if="!item.hmotnostValidDiff">Required only one from pair "mnozstvi - hmotnost"</span>
                 </span>
               </td>
             </tr>
@@ -288,6 +290,8 @@ export default class materialTransfer extends Vue {
     itemObj[id]['mvmValid'] = true;
     itemObj[id]['mnozstviValid'] = true;
     itemObj[id]['hmotnostValid'] = true;
+    itemObj[id]['mnozstviValidDiff'] = true;
+    itemObj[id]['hmotnostValidDiff'] = true;
   }
 
   updateChanges() {
@@ -295,20 +299,23 @@ export default class materialTransfer extends Vue {
   }
 
   updateChangesAndStore() {
+    debugger;
     if (this.checkCopiedValues(this.copiedItemsArr)) {
+      debugger;
       console.log('updateChangesAndStore done');
       // const dataObj = _.values(this.copiedItems);
-      // this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
-      // httpService.putDirect(materialBaseUrl, dataObj).then((response) => {
-      //   this.messageBoxShow('success');
-      //   this.updateChanges();
-      // }, (error) => {
-      //   this.messageBoxShow('error');
-      //   console.log('error ', error);
-      // }).finally(() => {
-      //   this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADED });
-      //   this.messageBoxHide();
-      // });
+      const dataObj = this.copiedItemsArr;
+      this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
+      httpService.putDirect(materialBaseUrl, dataObj).then((response) => {
+        this.messageBoxShow('success');
+        this.updateChanges();
+      }, (error) => {
+        this.messageBoxShow('error');
+        console.log('error ', error);
+      }).finally(() => {
+        this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADED });
+        this.messageBoxHide();
+      });
     }
   }
 
@@ -426,28 +433,63 @@ export default class materialTransfer extends Vue {
 
   checkCopiedValues(cItemsArr: any[]) {
     debugger;
-    let res = true;
+    let res = 0;
     for (let i = 0; i < cItemsArr.length; i++) {
-      if (cItemsArr[i].mvm.trim() === this.itemsMaterialFiltered[cItemsArr[i].index].rendered.mvm) {
+      // if (cItemsArr[i].mvm.trim() === this.itemsMaterialFiltered[cItemsArr[i].index].rendered.mvm) {
+      if (cItemsArr[i].mvm.trim() !== '') {
         cItemsArr[i].mvmValid = true;
       } else {
         cItemsArr[i].mvmValid = false;
-        res = false;
+        res++;
       }
-      if (cItemsArr[i].mnozstvi === this.itemsMaterialFiltered[cItemsArr[i].index].rendered.mnozstvi) {
+      if ((cItemsArr[i].mnozstvi.trim() !== '' && Number(cItemsArr[i].mnozstvi.trim()) > 0 && Number(cItemsArr[i].mnozstvi.trim()) <= this.itemsMaterialFiltered[cItemsArr[i].index].rendered.mnozstvi
+        && cItemsArr[i].hmotnost === '')
+        || (cItemsArr[i].hmotnost.trim() !== '' && Number(cItemsArr[i].hmotnost.trim()) > 0 && Number(cItemsArr[i].hmotnost.trim()) <= this.itemsMaterialFiltered[cItemsArr[i].index].rendered.hmotnost
+        && cItemsArr[i].mnozstvi === '')) {
         cItemsArr[i].mnozstviValid = true;
-      } else {
-        cItemsArr[i].mnozstviValid = false;
-        res = false;
-      }
-      if (cItemsArr[i].hmotnost === this.itemsMaterialFiltered[cItemsArr[i].index].rendered.hmotnost) {
         cItemsArr[i].hmotnostValid = true;
-      } else {
+        cItemsArr[i].mnozstviValidDiff = true;
+        cItemsArr[i].hmotnostValidDiff = true;
+      } else if (cItemsArr[i].mnozstvi.trim() !== '' && (Number(cItemsArr[i].mnozstvi.trim()) <= 0 || Number(cItemsArr[i].mnozstvi.trim()) > this.itemsMaterialFiltered[cItemsArr[i].index].rendered.mnozstvi)
+        && cItemsArr[i].hmotnost === '') {
+        cItemsArr[i].mnozstviValid = false;
+        cItemsArr[i].hmotnostValid = true;
+        cItemsArr[i].mnozstviValidDiff = true;
+        cItemsArr[i].hmotnostValidDiff = true;
+        res++;
+      } else if (cItemsArr[i].hmotnost.trim() !== '' && (Number(cItemsArr[i].hmotnost.trim()) <= 0 || Number(cItemsArr[i].hmotnost.trim()) > this.itemsMaterialFiltered[cItemsArr[i].index].rendered.hmotnost)
+        && cItemsArr[i].mnozstvi === '') {
+        cItemsArr[i].mnozstviValid = true;
         cItemsArr[i].hmotnostValid = false;
-        res = false;
+        cItemsArr[i].mnozstviValidDiff = true;
+        cItemsArr[i].hmotnostValidDiff = true;
+        res++;
+      } else if (cItemsArr[i].hmotnost.trim() === '' && cItemsArr[i].mnozstvi.trim() === '') {
+        cItemsArr[i].mnozstviValid = false;
+        cItemsArr[i].hmotnostValid = false;
+        res++;
+      } else if ((cItemsArr[i].mnozstvi.trim() !== '' && Number(cItemsArr[i].mnozstvi.trim()) > 0 && Number(cItemsArr[i].mnozstvi.trim()) <= this.itemsMaterialFiltered[cItemsArr[i].index].rendered.mnozstvi)
+      && (cItemsArr[i].hmotnost.trim() !== '' && Number(cItemsArr[i].hmotnost.trim()) > 0 && Number(cItemsArr[i].hmotnost.trim()) <= this.itemsMaterialFiltered[cItemsArr[i].index].rendered.hmotnost)) {
+        cItemsArr[i].mnozstviValid = true;
+        cItemsArr[i].hmotnostValid = true;
+        cItemsArr[i].mnozstviValidDiff = false;
+        cItemsArr[i].hmotnostValidDiff = false;
+        res++;
       }
+      // if (cItemsArr[i].mnozstvi === this.itemsMaterialFiltered[cItemsArr[i].index].rendered.mnozstvi) {
+      //   cItemsArr[i].mnozstviValid = true;
+      // } else {
+      //   cItemsArr[i].mnozstviValid = false;
+      //   res = false;
+      // }
+      // if (cItemsArr[i].hmotnost === this.itemsMaterialFiltered[cItemsArr[i].index].rendered.hmotnost) {
+      //   cItemsArr[i].hmotnostValid = true;
+      // } else {
+      //   cItemsArr[i].hmotnostValid = false;
+      //   res = false;
+      // }
     }
-    return res;
+    return res === 0;
   }
 
   messageBoxShow(type: string) {
