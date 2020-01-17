@@ -396,12 +396,14 @@ export default class materialTransfer extends Vue {
   }
 
   loadMaterialItems() {
+    debugger;
     this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
-    httpService.getDirect(this.generateUrl).then((response) => {
-    // httpMockService.getMockJournalDelay().then((response) => {
+    httpMockService.getMockDataTransferDelay().then((response: any) => {
+      this.itemsMaterialFiltered = response;
+      // httpService.getDirect(this.generateUrl).then((response) => {
       this.messageBoxShow('success');
-      this.itemsMaterialFiltered = gh.renderedOriginal(response.data.materials);
-    }, (error) => {
+      // this.itemsMaterialFiltered = gh.renderedOriginal(response.data.materials);
+    }, (error: any) => {
       this.messageBoxShow('error');
       console.log('error ', error);
     }).finally(() => {

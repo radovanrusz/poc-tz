@@ -1,0 +1,29 @@
+[
+    {
+        "rendered": {
+            "_id": "jj1",
+            "kmat": "kmat1",
+            "mvm": "mm11",
+            "mnozstvi": "10",
+            "hmotnost": "100"
+        }
+    },
+    {
+        "rendered": {
+            "_id": "jj2",
+            "kmat": "kmat1",
+            "mvm": "mm1",
+            "mnozstvi": "12",
+            "hmotnost": "101"
+        }
+    },
+    {
+        "rendered": {
+            "_id": "jj3",
+            "kmat": "kmat11",
+            "mvm": "mm1",
+            "mnozstvi": "11",
+            "hmotnost": "102"
+        }
+    }
+]
