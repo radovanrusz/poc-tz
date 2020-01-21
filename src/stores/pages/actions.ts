@@ -25,7 +25,7 @@ const actions: ActionTree<PagesStore, RootState> = {
       });
     });
   },
-  userPagesData({ commit, state }: ActionContext<PagesStore, RootState>, { role }: { role: string[] }) {
+  userPagesData({ commit, state }: ActionContext<PagesStore, RootState>, { role, token }: { role: string[], token: string }) {
     return new Promise((resolve, reject) => {
       // httpMockService.getMockDataAllowedRolesDelay().then((response: any) => {
       // httpMockService.getMockDataAllowedRolesArrayDelay().then((response: any) => { // this worked fakeBE ok
@@ -34,7 +34,8 @@ const actions: ActionTree<PagesStore, RootState> = {
       const rolesArrStr = role.join(',');
       const queryString = `roles=${rolesArrStr}`;
       debugger;
-      httpService.getDirect(`${cocoUrl}?${queryString}`).then((response: any) => {
+      const headers = { 'Content-Type': 'text/plain;charset=UTF-8', Authorization: token };
+      httpService.getDirect(`${cocoUrl}?${queryString}`, { headers }).then((response: any) => {
         debugger;
         // const res: any = response.allowed_content; // server response
         // const res: any = response; // server response

@@ -50,7 +50,7 @@ export default class LoginPage extends Vue {
 
   @UserStore.Action loginUser!: ({ name, password }: { name: string, password: string }) => Promise<boolean>;
 
-  @PagesStore.Action userPagesData!: ({ role }: { role: string }) => void;
+  @PagesStore.Action userPagesData!: ({ role, token }: { role: string, token: string }) => void;
 
   @ModeStore.Action setMode!:
     ({ reference, status }: { reference: Reference, status: AppMode }) => void;
@@ -61,9 +61,10 @@ export default class LoginPage extends Vue {
       this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
       this.loginUser({ name: userAuth.name.trim(), password: userAuth.password })
         .then((response) => {
+          debugger;
           if (response) {
-            const { role }: any = response;
-            return this.userPagesData({ role });
+            const { role, token }: any = response;
+            return this.userPagesData({ role, token });
           }
           (this.$refs.loginForm as HTMLFormElement).showAlertBannerAndReset();
           return false;

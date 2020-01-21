@@ -159,9 +159,9 @@ export class HttpService {
     return Vue.axios.post(`${this.formedURL}${endpoint}`, body);
   }
 
-  public getDirect(url: string, params: any = {}, headers: any = {}, body: any = {}): Promise<any> {
+  public getDirect(url: string, headers: any = {}): Promise<any> {
     debugger;
-    return Vue.axios.get(url, { params });
+    return Vue.axios.get(url, headers);
   }
 
   public putDirect(url: string, obj: any, headers: any = {}): Promise<any> {
