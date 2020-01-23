@@ -34,7 +34,7 @@ const actions: ActionTree<PagesStore, RootState> = {
       const rolesArrStr = role.join(',');
       const queryString = `roles=${rolesArrStr}`;
       debugger;
-      const headers = { 'Content-Type': 'text/plain;charset=UTF-8', Authorization: token };
+      const headers = { 'Content-Type': 'text/plain;charset=UTF-8', 'ibm-sec-token': token };
       httpService.getDirect(`${cocoUrl}?${queryString}`, { headers }).then((response: any) => {
         debugger;
         // const res: any = response.allowed_content; // server response
