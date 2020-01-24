@@ -253,8 +253,8 @@ export default class JournalReview extends Vue {
 
   loadJournalItems() {
     this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
-    const headers = { 'Content-Type': 'text/plain;charset=UTF-8', 'ibm-sec-token': this.accessToken };
-    httpService.getDirect(this.generateUrl, { headers }).then((response) => {
+    // const headers = { 'Content-Type': 'text/plain;charset=UTF-8', 'ibm-sec-token': this.accessToken };
+    httpService.getDirect(this.generateUrl).then((response) => {
     // httpMockService.getMockJournalDelay().then((response) => {
       this.messageBoxShow('success');
       this.itemsJournalFiltered = response.data;
