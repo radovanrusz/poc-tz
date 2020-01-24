@@ -164,11 +164,11 @@ export class HttpService {
     return Vue.axios.get(url, headers);
   }
 
-  public putDirect(url: string, obj: any, headers: any = {}): Promise<any> {
-    return Vue.axios.put(`${url}`, obj);
+  public putDirect(url: string, data: any, headers: any = {}): Promise<any> {
+    return Vue.axios.put(`${url}`, data, headers);
   }
 
-  public postDirect(url: string, obj: any, headers: any = {}): Promise<any> {
-    return Vue.axios.post(`${url}`, obj);
+  public postDirect(url: string, data: any, headers: any = {}): Promise<any> {
+    return Vue.axios.post(`${url}`, data, headers);
   }
 }

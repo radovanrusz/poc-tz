@@ -78,7 +78,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import _ from 'lodash';
 import Multiselect from 'vue-multiselect';
 import { namespace } from 'vuex-class';
-import { PAGES, MODE } from '@/stores/constants';
+import { PAGES, MODE, USER } from '@/stores/constants';
 import { Page, Subpage } from '@/stores/pages/pages.types';
 import { GeneralHelper } from '@/helpers/general.helper';
 import { HttpMockService, HttpService } from '@/services/http.service';
@@ -88,6 +88,7 @@ import Message from '@/components/common/message/Message.vue';
 
 const PagesStore = namespace(PAGES);
 const ModeStore = namespace(MODE);
+const UserStore = namespace(USER);
 const generalHelper = new GeneralHelper();
 const httpService = new HttpService();
 const httpMockService = new HttpMockService();
@@ -145,6 +146,8 @@ export default class JournalReview extends Vue {
 
   @ModeStore.Action setMode!:
     ({ reference, status }: { reference: Reference, status: AppMode }) => void;
+
+  @UserStore.Getter accessToken: any;
 
   message: { type: string, text: string, executed: boolean, show: boolean } = {
     type: '',
@@ -205,6 +208,7 @@ export default class JournalReview extends Vue {
     this.optionsMvm1.push({ title: '' });
     this.optionsMvm2.push({ title: '' });
 
+    // const headers = { 'Content-Type': 'text/plain;charset=UTF-8', 'ibm-sec-token': this.accessToken };
     httpService.getDirect(journalFiltersUrl).then((response) => {
       const resData = response.data;
       Object.keys(resData).forEach((key) => {
@@ -249,7 +253,8 @@ export default class JournalReview extends Vue {
 
   loadJournalItems() {
     this.setMode({ reference: REFERENCE_INITIAL, status: MODE_LOADING });
-    httpService.getDirect(this.generateUrl).then((response) => {
+    const headers = { 'Content-Type': 'text/plain;charset=UTF-8', 'ibm-sec-token': this.accessToken };
+    httpService.getDirect(this.generateUrl, { headers }).then((response) => {
     // httpMockService.getMockJournalDelay().then((response) => {
       this.messageBoxShow('success');
       this.itemsJournalFiltered = response.data;
